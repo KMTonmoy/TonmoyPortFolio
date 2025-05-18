@@ -1,10 +1,11 @@
-import Navbar from "@/components/navbar"
-import Hero from "@/components/hero"
-import Features from "@/components/features"
-import Portfolio from "@/components/portfolio"
-import Testimonials from "@/components/testimonials"
-import ContactSection from "@/components/contact-section"
-import Footer from "@/components/footer"
+import Navbar from "@/components/navbar";
+import Hero from "@/components/hero";
+import Features from "@/components/features";
+import Portfolio from "@/components/portfolio";
+import Testimonials from "@/components/testimonials";
+import ContactSection from "@/components/contact-section";
+import Footer from "@/components/footer";
+import MySkill from "@/components/MySkill";
 
 export default function Home() {
   return (
@@ -19,12 +20,13 @@ export default function Home() {
       <div className="relative z-10">
         <Hero />
         <Features />
+        <MySkill />
+
         <Portfolio />
         <Testimonials />
         <ContactSection />
         <Footer />
       </div>
     </div>
-  )
+  );
 }
-
