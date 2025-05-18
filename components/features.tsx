@@ -25,15 +25,26 @@ const features = [
     description: "Fast-loading, responsive websites optimized for all devices.",
     icon: Zap,
   },
+  {
+    name: "SEO Optimization",
+    description: "Improve your website’s visibility and ranking on search engines.",
+    icon: Code, // Replace with another Lucide icon if desired
+  },
+  {
+    name: "Maintenance & Support",
+    description: "Reliable and ongoing support to keep your website running smoothly.",
+    icon: Layers, // Replace with another Lucide icon if desired
+  },
 ]
+
 
 export default function Features() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.2 })
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: "easeOut" } },
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
   }
 
   const containerVariants = {
@@ -70,7 +81,7 @@ export default function Features() {
     >
       <div className="mx-auto max-w-[58rem] text-center">
         <motion.h2
-          className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-5xl flex justify-center flex-wrap"
+          className="font-bold text-3xl leading-[1.1] sm:text-4xl md:text-5xl flex justify-center flex-wrap"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
@@ -95,21 +106,21 @@ export default function Features() {
         </motion.p>
       </div>
 
-      <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-2">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
         {features.map((feature, index) => (
           <motion.div
             key={feature.name}
-            className="relative overflow-hidden rounded-lg border bg-background p-8"
+            className="relative overflow-hidden rounded-2xl border bg-background p-8 shadow-md hover:shadow-xl transition-shadow duration-300"
             variants={cardVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             transition={{ delay: index * 0.2 }}
           >
             <div className="flex items-center gap-4">
-              <feature.icon className="h-8 w-8 text-primary" />
-              <h3 className="font-bold">{feature.name}</h3>
+              <feature.icon className="h-10 w-10 text-primary" />
+              <h3 className="text-lg font-bold">{feature.name}</h3>
             </div>
-            <p className="mt-2 text-muted-foreground">{feature.description}</p>
+            <p className="mt-3 text-muted-foreground">{feature.description}</p>
           </motion.div>
         ))}
       </div>
