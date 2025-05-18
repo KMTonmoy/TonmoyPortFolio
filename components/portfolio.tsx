@@ -13,28 +13,24 @@ const projects = [
     description: "A fully responsive e-commerce solution with integrated payment processing.",
     image: "https://images.unsplash.com/photo-1661956602116-aa6865609028?q=80&w=1964&auto=format&fit=crop",
     tags: ["Next.js", "Tailwind CSS", "Stripe"],
-    link: "#",
+    link: "https://ecommerce-tonmoy.vercel.app",
+    detailsLink: "/projects/ecommerce-platform",
   },
   {
     title: "Corporate Website",
     description: "Modern corporate website with custom CMS integration.",
     image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=2069&auto=format&fit=crop",
     tags: ["React", "Node.js", "MongoDB"],
-    link: "#",
+    link: "https://corporate-tonmoy.vercel.app",
+    detailsLink: "/projects/corporate-website",
   },
   {
     title: "Mobile App UI",
     description: "User interface design for a fitness tracking mobile application.",
     image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1974&auto=format&fit=crop",
     tags: ["Figma", "UI/UX", "Prototyping"],
-    link: "#",
-  },
-  {
-    title: "SaaS Dashboard",
-    description: "Analytics dashboard for a SaaS product with real-time data visualization.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop",
-    tags: ["Vue.js", "D3.js", "Firebase"],
-    link: "#",
+    link: "https://figma.com/tonmoy-fitness-ui",
+    detailsLink: "/projects/mobile-app-ui",
   },
 ]
 
@@ -45,32 +41,32 @@ export default function Portfolio() {
   const containerVariants = {
     visible: {
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: 0.1,
       },
     },
   }
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
+    hidden: { opacity: 0, y: 30, scale: 0.97 },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
       transition: {
-        duration: 0.5,
+        duration: 0.3,
         ease: "easeOut",
       },
     },
   }
 
   const letterVariants = {
-    hidden: { opacity: 0, y: -30 },
+    hidden: { opacity: 0, y: -20 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
       transition: {
-        delay: i * 0.04,
-        duration: 0.4,
+        delay: i * 0.02,
+        duration: 0.25,
         ease: "easeOut",
       },
     }),
@@ -101,9 +97,9 @@ export default function Portfolio() {
         </motion.h2>
         <motion.p
           className="mt-4 text-muted-foreground sm:text-lg"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.6, duration: 0.5 }}
+          transition={{ delay: 0.3, duration: 0.3 }}
         >
           Explore our recent work and see how we've helped businesses achieve their digital goals.
         </motion.p>
@@ -128,7 +124,6 @@ export default function Portfolio() {
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
               />
             </div>
-
             <div className="p-6">
               <h3 className="text-xl font-bold mb-2">{project.title}</h3>
               <p className="text-muted-foreground mb-4">{project.description}</p>
@@ -139,11 +134,18 @@ export default function Portfolio() {
                   </span>
                 ))}
               </div>
-              <Button variant="outline" size="sm" asChild>
-                <a href={project.link} target="_blank" rel="noopener noreferrer" className="group">
-                  View Project <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={project.detailsLink}>
+                    Details
+                  </Link>
+                </Button>
+                <Button variant="outline" size="sm" asChild>
+                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="group">
+                    Live Link <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </a>
+                </Button>
+              </div>
             </div>
           </motion.div>
         ))}
@@ -151,9 +153,9 @@ export default function Portfolio() {
 
       <motion.div
         className="mt-12 text-center"
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ delay: 0.8, duration: 0.5 }}
+        transition={{ delay: 0.4, duration: 0.3 }}
       >
         <Button variant="gradient" size="lg" asChild>
           <Link href="/projects" className="group">

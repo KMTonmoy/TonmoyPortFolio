@@ -1,130 +1,156 @@
- import Footer from "@/components/footer"
+"use client"
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ExternalLink } from "lucide-react"
+import Link from "next/link"
+import { motion, useInView } from "framer-motion"
+import { useRef } from "react"
 
 const projects = [
   {
     title: "E-Commerce Platform",
-    description:
-      "A fully responsive e-commerce solution with integrated payment processing and inventory management. Built for a fashion retailer to enhance their online presence and streamline operations.",
-    image: "/placeholder.svg?height=400&width=600",
-    tags: ["Next.js", "Tailwind CSS", "Stripe", "Sanity CMS"],
-    link: "#",
-    client: "Fashion Boutique Inc.",
+    description: "A fully responsive e-commerce solution with integrated payment processing.",
+    image: "https://images.unsplash.com/photo-1661956602116-aa6865609028?q=80&w=1964&auto=format&fit=crop",
+    tags: ["Next.js", "Tailwind CSS", "Stripe"],
+    link: "https://ecommerce-tonmoy.vercel.app",
+    detailsLink: "/projects/ecommerce-platform",
   },
   {
     title: "Corporate Website",
-    description:
-      "Modern corporate website with custom CMS integration, multilingual support, and interactive elements to showcase the company's global presence and services.",
-    image: "/placeholder.svg?height=400&width=600",
-    tags: ["React", "Node.js", "MongoDB", "i18n"],
-    link: "#",
-    client: "Global Consulting Group",
+    description: "Modern corporate website with custom CMS integration.",
+    image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=2069&auto=format&fit=crop",
+    tags: ["React", "Node.js", "MongoDB"],
+    link: "https://corporate-tonmoy.vercel.app",
+    detailsLink: "/projects/corporate-website",
   },
   {
     title: "Mobile App UI",
-    description:
-      "User interface design for a fitness tracking mobile application with personalized workout plans, progress tracking, and social features to connect with other fitness enthusiasts.",
-    image: "/placeholder.svg?height=400&width=600",
-    tags: ["Figma", "UI/UX", "Prototyping", "User Testing"],
-    link: "#",
-    client: "FitTrack Technologies",
-  },
-  {
-    title: "SaaS Dashboard",
-    description:
-      "Analytics dashboard for a SaaS product with real-time data visualization, customizable widgets, and comprehensive reporting tools for business intelligence.",
-    image: "/placeholder.svg?height=400&width=600",
-    tags: ["Vue.js", "D3.js", "Firebase", "GraphQL"],
-    link: "#",
-    client: "DataMetrics ",
-  },
-  {
-    title: "Educational Platform",
-    description:
-      "Interactive learning platform with course management, video streaming, quiz functionality, and progress tracking for students and educators.",
-    image: "/placeholder.svg?height=400&width=600",
-    tags: ["Angular", "Express.js", "PostgreSQL", "WebRTC"],
-    link: "#",
-    client: "EduTech Innovations",
-  },
-  {
-    title: "Restaurant Ordering System",
-    description:
-      "Online ordering system with table reservations, menu management, and integration with kitchen display systems for a seamless dining experience.",
-    image: "/placeholder.svg?height=400&width=600",
-    tags: ["React Native", "Node.js", "Redis", "Payment Gateway"],
-    link: "#",
-    client: "Gourmet Restaurant Chain",
+    description: "User interface design for a fitness tracking mobile application.",
+    image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1974&auto=format&fit=crop",
+    tags: ["Figma", "UI/UX", "Prototyping"],
+    link: "https://figma.com/tonmoy-fitness-ui",
+    detailsLink: "/projects/mobile-app-ui",
   },
 ]
 
-export default function ProjectsPage() {
+export default function Portfolio() {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, amount: 0.2 })
+
+  const containerVariants = {
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.97 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
+  }
+
+  const letterVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.02,
+        duration: 0.25,
+        ease: "easeOut",
+      },
+    }),
+  }
+
+  const title = "My Projects"
+
   return (
-    <div className="relative min-h-screen">
-      <div className="pointer-events-none fixed inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
-        <div className="absolute right-0 top-0 h-[500px] w-[500px] bg-blue-500/10 blur-[100px]" />
-        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] bg-purple-500/10 blur-[100px]" />
+    <motion.section
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={containerVariants}
+      className="container py-24 md:py-32"
+    >
+      <div className="mx-auto max-w-[58rem] text-center mb-16">
+        <motion.h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-5xl flex justify-center flex-wrap">
+          {title.split("").map((char, index) => (
+            <motion.span
+              key={index}
+              variants={letterVariants}
+              custom={index}
+              className={char === " " ? "w-2" : ""}
+            >
+              {char}
+            </motion.span>
+          ))}
+        </motion.h2>
+        <motion.p
+          className="mt-4 text-muted-foreground sm:text-lg"
+          initial={{ opacity: 0, y: 10 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.3, duration: 0.3 }}
+        >
+          Explore our recent work and see how we've helped businesses achieve their digital goals.
+        </motion.p>
       </div>
 
-      <div className="relative z-10">
- 
-        <main className="container py-24">
-          <div className="mx-auto max-w-[58rem] text-center mb-16">
-            <h1 className="font-bold text-4xl leading-[1.1] sm:text-5xl md:text-6xl">Our Projects</h1>
-            <p className="mt-4 text-muted-foreground sm:text-lg">
-              Explore our portfolio of work across various industries and technologies.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {projects.map((project, index) => (
-              <div key={index} className="group relative overflow-hidden rounded-lg border">
-                <div className="aspect-video overflow-hidden">
-                  <Image
-                    src={project.image || "/placeholder.svg"}
-                    alt={project.title}
-                    width={600}
-                    height={400}
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                  <p className="text-sm text-primary mb-2">Client: {project.client}</p>
-                  <p className="text-muted-foreground mb-4">{project.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags.map((tag, tagIndex) => (
-                      <span key={tagIndex} className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <Button variant="outline" size="sm" asChild>
-                    <a href={project.link} target="_blank" rel="noopener noreferrer">
-                      View Project <ExternalLink className="ml-2 h-4 w-4" />
-                    </a>
-                  </Button>
-                </div>
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        variants={containerVariants}
+      >
+        {projects.map((project, index) => (
+          <motion.div
+            key={index}
+            className="group relative overflow-hidden rounded-lg border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
+            variants={cardVariants}
+          >
+            <div className="aspect-video overflow-hidden">
+              <Image
+                src={project.image || "/placeholder.svg"}
+                alt={project.title}
+                width={600}
+                height={400}
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
+            <div className="p-6">
+              <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+              <p className="text-muted-foreground mb-4">{project.description}</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {project.tags.map((tag, tagIndex) => (
+                  <span key={tagIndex} className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">
+                    {tag}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
-
-          <div className="mt-16 text-center">
-            <p className="text-muted-foreground mb-6">
-              Looking for a custom solution for your business? We'd love to help.
-            </p>
-            <Button size="lg" asChild>
-              <a href="/contact">Contact Us</a>
-            </Button>
-          </div>
-        </main>
-
-        <Footer />
-      </div>
-    </div>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={project.detailsLink}>
+                    Details
+                  </Link>
+                </Button>
+                <Button variant="outline" size="sm" asChild>
+                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="group">
+                    Live Link <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </a>
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+ 
+    </motion.section>
   )
 }
-
