@@ -50,24 +50,18 @@ export default function Portfolio() {
     },
   }
 
-  const cardVariants = (index: number) => ({
-    hidden: {
-      opacity: 0,
-      x: index % 2 === 0 ? -100 : 100,
-      rotate: index % 2 === 0 ? -6 : 6,
-      scale: 0.95,
-    },
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
     visible: {
       opacity: 1,
-      x: 0,
-      rotate: 0,
+      y: 0,
       scale: 1,
       transition: {
-        duration: 0.6,
+        duration: 0.5,
         ease: "easeOut",
       },
     },
-  })
+  }
 
   const letterVariants = {
     hidden: { opacity: 0, y: -30 },
@@ -115,14 +109,15 @@ export default function Portfolio() {
         </motion.p>
       </div>
 
-      <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        variants={containerVariants}
+      >
         {projects.map((project, index) => (
           <motion.div
             key={index}
             className="group relative overflow-hidden rounded-lg border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
-            variants={cardVariants(index)}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
+            variants={cardVariants}
           >
             <div className="aspect-video overflow-hidden">
               <Image

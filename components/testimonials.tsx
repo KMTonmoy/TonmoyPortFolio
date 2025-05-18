@@ -14,7 +14,7 @@ const testimonials = [
   {
     quote: "Working with Tonmoy was a game-changer for our business. They delivered beyond our expectations.",
     author: "Robert Johnson",
-    position: "Marketing Director, Global  LLC",
+    position: "Marketing Director, Global LLC",
     image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887&auto=format&fit=crop",
   },
   {
@@ -28,7 +28,7 @@ const testimonials = [
 export default function Testimonials() {
   return (
     <section className="bg-primary/5 py-24 md:py-32">
-      <div className="container">
+      <div className="container px-4">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -36,13 +36,15 @@ export default function Testimonials() {
           viewport={{ once: true }}
           className="mx-auto max-w-[58rem] text-center mb-16"
         >
-          <h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-5xl">Client Testimonials</h2>
-          <p className="mt-4 text-muted-foreground sm:text-lg">
+          <h2 className="font-bold text-3xl sm:text-4xl md:text-5xl leading-tight">
+            Client Testimonials
+          </h2>
+          <p className="mt-4 text-muted-foreground text-base sm:text-lg">
             Don't just take our word for it. Here's what our clients have to say.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
@@ -50,14 +52,14 @@ export default function Testimonials() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true }}
-              className="bg-background p-8 rounded-lg shadow-sm hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 border border-transparent hover:border-primary/20"
+              className="bg-background p-6 sm:p-8 rounded-lg shadow-sm hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 border border-transparent hover:border-primary/20"
             >
               <Quote className="h-8 w-8 text-primary/40 mb-4" />
-              <p className="text-lg mb-6">"{testimonial.quote}"</p>
+              <p className="text-base sm:text-lg mb-6">"{testimonial.quote}"</p>
               <div className="flex items-center">
                 <div className="relative h-12 w-12 rounded-full overflow-hidden mr-4">
                   <Image
-                    src={testimonial.image || "/placeholder.svg"}
+                    src={testimonial.image}
                     alt={testimonial.author}
                     fill
                     className="object-cover"
