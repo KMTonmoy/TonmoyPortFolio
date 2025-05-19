@@ -6,6 +6,7 @@ import Testimonials from "@/components/testimonials";
 import ContactSection from "@/components/contact-section";
 import Footer from "@/components/footer";
 import MySkill from "@/components/MySkill";
+import Blogs from "@/components/Blogs";
 
 export default function Home() {
   return (
@@ -23,6 +24,7 @@ export default function Home() {
         <MySkill />
 
         <Portfolio />
+        <Blogs/>
         <Testimonials />
         <ContactSection />
         <Footer />

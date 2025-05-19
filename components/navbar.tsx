@@ -70,13 +70,21 @@ export default function Navbar() {
 
         <div className="hidden md:flex items-center space-x-4">
           <Button variant="gradient" size="sm" asChild>
-            <Link href="/login">Login</Link>
+            <Link href="/contact">Contact</Link>
           </Button>
         </div>
 
         <div className="flex md:hidden">
-          <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
           </Button>
         </div>
       </div>
@@ -140,13 +148,13 @@ export default function Navbar() {
                 Blogs
               </Link>
               <Link
-                href="/login"
+                href="/contact"
                 className={`transition-colors hover:text-[#6397ff] ${
-                  pathName === "/login" ? "text-[#6397ff] underline" : ""
+                  pathName === "/contact" ? "text-[#6397ff] underline" : ""
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Login
+                Contact
               </Link>
             </nav>
           </div>
