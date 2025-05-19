@@ -77,20 +77,7 @@ const Page = () => {
         </div>
       </div>
 
-      {/* Image Animation */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true }}
-        className="flex justify-center"
-      >
-        <img
-          src="/dashboard-illustration.svg"
-          alt="Dashboard Illustration"
-          className="max-w-md w-full"
-        />
-      </motion.div>
+    
     </div>
   );
 };
