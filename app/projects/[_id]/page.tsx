@@ -66,7 +66,7 @@ const ProjectDetailsPage = async ({ params }: Props) => {
           </a>
         </p>
       )}
-
+ 
       {project.detailsLink && (
         <p>
           <strong>Details Link:</strong>{' '}
