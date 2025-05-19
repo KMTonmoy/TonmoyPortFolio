@@ -26,7 +26,7 @@ export default function Portfolio() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const res = await fetch('http://localhost:8000/projects')
+        const res = await fetch('https://tonmoy-portfolio-back-end.vercel.app/projects')
         if (!res.ok) throw new Error('Failed to fetch projects')
         const data = await res.json()
         setProjects(data)

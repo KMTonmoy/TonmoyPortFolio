@@ -25,7 +25,7 @@ export default function Portfolio() {
   const [visibleCount, setVisibleCount] = useState(3);
 
   useEffect(() => {
-    fetch("http://localhost:8000/projects")
+    fetch("https://tonmoy-portfolio-back-end.vercel.app/projects")
       .then((response) => response.json())
       .then((json: Project[]) => setProjects(json))
       .catch(() => setProjects([]));

@@ -70,7 +70,7 @@ const SkillsPage = () => {
 
   const fetchSkills = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/skills");
+      const res = await axios.get("https://tonmoy-portfolio-back-end.vercel.app/skills");
       setSkills(res.data);
     } catch {
       toast.error("Failed to fetch skills");
@@ -80,7 +80,7 @@ const SkillsPage = () => {
   const handleAddSkill = async () => {
     if (!newSkill.name || !newSkill.image) return toast.error("Please fill all fields");
     try {
-      await axios.post("http://localhost:8000/skills", newSkill);
+      await axios.post("https://tonmoy-portfolio-back-end.vercel.app/skills", newSkill);
       setNewSkill({ name: "", image: "" });
       setAddModalOpen(false);
       fetchSkills();
@@ -94,7 +94,7 @@ const SkillsPage = () => {
     if (!editingSkill) return;
     if (!editingSkill.name || !editingSkill.image) return toast.error("Please fill all fields");
     try {
-      await axios.patch(`http://localhost:8000/skills/${editingSkill._id}`, editingSkill);
+      await axios.patch(`https://tonmoy-portfolio-back-end.vercel.app/skills/${editingSkill._id}`, editingSkill);
       setEditingSkill(null);
       setEditModalOpen(false);
       fetchSkills();
@@ -117,7 +117,7 @@ const SkillsPage = () => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:8000/skills/${id}`);
+        await axios.delete(`https://tonmoy-portfolio-back-end.vercel.app/skills/${id}`);
         fetchSkills();
         toast.success("Skill deleted successfully");
       } catch {

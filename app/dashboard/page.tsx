@@ -25,7 +25,7 @@ const Page = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/projects")
+    fetch("https://tonmoy-portfolio-back-end.vercel.app/projects")
       .then((res) => res.json())
       .then((data) => setProjects(data ?? []))
       .catch((err) => {
@@ -33,7 +33,7 @@ const Page = () => {
         setProjects([]);
       });
 
-    fetch("http://localhost:8000/skills")
+    fetch("https://tonmoy-portfolio-back-end.vercel.app/skills")
       .then((res) => res.json())
       .then((data) => setSkills(data ?? []))
       .catch((err) => {
@@ -41,7 +41,7 @@ const Page = () => {
         setSkills([]);
       });
 
-    fetch("http://localhost:8000/editor-content")
+    fetch("https://tonmoy-portfolio-back-end.vercel.app/editor-content")
       .then((res) => res.json())
       .then((data) => setBlogs(data ?? []))
       .catch((err) => {

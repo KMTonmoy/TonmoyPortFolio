@@ -77,7 +77,7 @@ const BlogEditorPage: React.FC = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:8000/editor-content", {
+      const res = await fetch("https://tonmoy-portfolio-back-end.vercel.app/editor-content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(blogData),

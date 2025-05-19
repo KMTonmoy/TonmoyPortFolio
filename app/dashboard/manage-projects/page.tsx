@@ -26,7 +26,7 @@ const ManageProjects: React.FC = () => {
   const [link, setLink] = useState('')
 
   useEffect(() => {
-    fetch('http://localhost:8000/projects')
+    fetch('https://tonmoy-portfolio-back-end.vercel.app/projects')
       .then((res) => res.json())
       .then(setProjects)
       .catch(console.error)
@@ -87,7 +87,7 @@ const ManageProjects: React.FC = () => {
     try {
       if (editingId) {
         // update
-        const res = await fetch(`http://localhost:8000/projects/${editingId}`, {
+        const res = await fetch(`https://tonmoy-portfolio-back-end.vercel.app/projects/${editingId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(projectData),
@@ -99,7 +99,7 @@ const ManageProjects: React.FC = () => {
         )
       } else {
         // add
-        const res = await fetch('http://localhost:8000/projects', {
+        const res = await fetch('https://tonmoy-portfolio-back-end.vercel.app/projects', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(projectData),
@@ -120,7 +120,7 @@ const ManageProjects: React.FC = () => {
     if (!confirm('Are you sure you want to delete this project?')) return
 
     try {
-      const res = await fetch(`http://localhost:8000/projects/${id}`, {
+      const res = await fetch(`https://tonmoy-portfolio-back-end.vercel.app/projects/${id}`, {
         method: 'DELETE',
       })
       if (!res.ok) return alert('Failed to delete project')

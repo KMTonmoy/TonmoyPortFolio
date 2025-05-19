@@ -19,7 +19,7 @@ const ManageBlogs: React.FC = () => {
 
   const fetchBlogs = async () => {
     try {
-      const res = await fetch('http://localhost:8000/editor-content')
+      const res = await fetch('https://tonmoy-portfolio-back-end.vercel.app/editor-content')
       const data = await res.json()
       setBlogs(data)
     } catch (err) {
@@ -41,7 +41,7 @@ const ManageBlogs: React.FC = () => {
 
     if (result.isConfirmed) {
       try {
-        const res = await fetch(`http://localhost:8000/editor-content/${_id}`, {
+        const res = await fetch(`https://tonmoy-portfolio-back-end.vercel.app/editor-content/${_id}`, {
           method: 'DELETE',
         })
         const response = await res.json()

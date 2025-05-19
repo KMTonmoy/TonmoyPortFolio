@@ -12,7 +12,7 @@ const MySkill = () => {
 
   useEffect(() => {
     const fetchSkills = async () => {
-      const res = await fetch("http://localhost:8000/skills");
+      const res = await fetch("https://tonmoy-portfolio-back-end.vercel.app/skills");
       const data: Skill[] = await res.json();
       setSkills(data);
     };
