@@ -10,16 +10,10 @@ interface Project {
   detailsLink?: string | null
 }
 
-interface Props {
-  params: {
-    _id: string
-  }
-}
-
 async function fetchProject(id: string): Promise<Project | null> {
   try {
     const res = await fetch(`https://tonmoy-portfolio-back-end.vercel.app/projects/${id}`, {
-      cache: 'no-store', // or 'force-cache' if you want caching
+      cache: 'no-store',
     })
     if (!res.ok) {
       if (res.status === 404) return null
@@ -31,8 +25,9 @@ async function fetchProject(id: string): Promise<Project | null> {
   }
 }
 
-const ProjectDetailsPage = async ({ params }: Props) => {
-  const project = await fetchProject(params._id)
+const ProjectDetailsPage = async ({ params }: { params: Promise<{ _id: string }> }) => {
+  const { _id } = await params
+  const project = await fetchProject(_id)
 
   if (!project) {
     return <div>No project found</div>
@@ -66,7 +61,7 @@ const ProjectDetailsPage = async ({ params }: Props) => {
           </a>
         </p>
       )}
- 
+
       {project.detailsLink && (
         <p>
           <strong>Details Link:</strong>{' '}

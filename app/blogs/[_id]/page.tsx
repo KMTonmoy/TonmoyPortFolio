@@ -1,19 +1,15 @@
-import React from 'react';
+export const dynamic = 'force-dynamic'
+
+import React from 'react'
 
 interface Blog {
-  _id: string;
-  title: string;
-  description: string;
-  image?: string;
-  tags?: string[];
-  link?: string;
-  detailsLink?: string | null;
-}
-
-interface Props {
-  params: {
-    _id: string;
-  };
+  _id: string
+  title: string
+  description: string
+  image?: string
+  tags?: string[]
+  link?: string
+  detailsLink?: string | null
 }
 
 async function fetchBlog(id: string): Promise<Blog | null> {
@@ -21,24 +17,22 @@ async function fetchBlog(id: string): Promise<Blog | null> {
     const res = await fetch(
       `https://tonmoy-portfolio-back-end.vercel.app/editor-content/${id}`,
       { cache: 'no-store' }
-    );
-
+    )
     if (!res.ok) {
-      if (res.status === 404) return null;
-      throw new Error('Failed to fetch blog data');
+      if (res.status === 404) return null
+      throw new Error('Failed to fetch blog data')
     }
-
-    const data = await res.json();
-    if (!data || !data._id) return null;
-
-    return data;
+    const data = await res.json()
+    if (!data || !data._id) return null
+    return data
   } catch {
-    return null;
+    return null
   }
 }
 
-const BlogDetailsPage = async ({ params }: Props) => {
-  const blog = await fetchBlog(params._id);
+const BlogDetailsPage = async ({ params }: { params: Promise<{ _id: string }> }) => {
+  const { _id } = await params
+  const blog = await fetchBlog(_id)
 
   if (!blog) {
     return (
@@ -47,7 +41,7 @@ const BlogDetailsPage = async ({ params }: Props) => {
           No blog found
         </h2>
       </div>
-    );
+    )
   }
 
   return (
@@ -108,7 +102,7 @@ const BlogDetailsPage = async ({ params }: Props) => {
         </p>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default BlogDetailsPage;
+export default BlogDetailsPage
