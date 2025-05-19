@@ -5,38 +5,39 @@ import { Button } from "@/components/ui/button"
 import { ExternalLink } from "lucide-react"
 import Link from "next/link"
 import { motion, useInView } from "framer-motion"
-import { useRef } from "react"
+import { useRef, useEffect, useState } from "react"
 
-const projects = [
-  {
-    title: "E-Commerce Platform",
-    description: "A fully responsive e-commerce solution with integrated payment processing.",
-    image: "https://images.unsplash.com/photo-1661956602116-aa6865609028?q=80&w=1964&auto=format&fit=crop",
-    tags: ["Next.js", "Tailwind CSS", "Stripe"],
-    link: "https://ecommerce-tonmoy.vercel.app",
-    detailsLink: "/projects/ecommerce-platform",
-  },
-  {
-    title: "Corporate Website",
-    description: "Modern corporate website with custom CMS integration.",
-    image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=2069&auto=format&fit=crop",
-    tags: ["React", "Node.js", "MongoDB"],
-    link: "https://corporate-tonmoy.vercel.app",
-    detailsLink: "/projects/corporate-website",
-  },
-  {
-    title: "Mobile App UI",
-    description: "User interface design for a fitness tracking mobile application.",
-    image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1974&auto=format&fit=crop",
-    tags: ["Figma", "UI/UX", "Prototyping"],
-    link: "https://figma.com/tonmoy-fitness-ui",
-    detailsLink: "/projects/mobile-app-ui",
-  },
-]
+interface Project {
+  _id: string
+  title: string
+  description: string
+  image: string
+  tags: string[]
+  link: string
+}
 
 export default function Portfolio() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, amount: 0.2 })
+
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const res = await fetch('http://localhost:8000/projects')
+        if (!res.ok) throw new Error('Failed to fetch projects')
+        const data = await res.json()
+        setProjects(data)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProjects()
+  }, [])
 
   const containerVariants = {
     visible: {
@@ -105,52 +106,55 @@ export default function Portfolio() {
         </motion.p>
       </div>
 
-      <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        variants={containerVariants}
-      >
-        {projects.map((project, index) => (
-          <motion.div
-            key={index}
-            className="group relative overflow-hidden rounded-lg border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
-            variants={cardVariants}
-          >
-            <div className="aspect-video overflow-hidden">
-              <Image
-                src={project.image || "/placeholder.svg"}
-                alt={project.title}
-                width={600}
-                height={400}
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-            </div>
-            <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-              <p className="text-muted-foreground mb-4">{project.description}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tags.map((tag, tagIndex) => (
-                  <span key={tagIndex} className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">
-                    {tag}
-                  </span>
-                ))}
+      {loading ? (
+        <p className="text-center text-muted-foreground">Loading projects...</p>
+      ) : (
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          variants={containerVariants}
+        >
+          {projects.map((project, index) => (
+            <motion.div
+              key={project._id}
+              className="group relative overflow-hidden rounded-lg border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
+              variants={cardVariants}
+            >
+              <div className="aspect-video overflow-hidden">
+                <img
+                  src={project.image || "/placeholder.svg"}
+                  alt={project.title}
+                  width={600}
+                  height={400}
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" asChild>
-                  <Link href={project.detailsLink}>
-                    Details
-                  </Link>
-                </Button>
-                <Button variant="outline" size="sm" asChild>
-                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="group">
-                    Live Link <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </a>
-                </Button>
+              <div className="p-6">
+                <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+                <p className="text-muted-foreground mb-4">{project.description}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tags.map((tag, tagIndex) => (
+                    <span key={tagIndex} className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href={`/projects/${project._id}`}>
+                      Details
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="sm" asChild>
+                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="group">
+                      Live Link <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </a>
+                  </Button>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
- 
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
     </motion.section>
   )
 }

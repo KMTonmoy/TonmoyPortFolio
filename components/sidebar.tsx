@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import { ReactElement, useState } from "react";
-import {
-  FaBars,
-  FaBook,
-  FaCogs,
-  FaEdit,
-  FaTimes,
-} from "react-icons/fa";
+import { FaBars, FaBook, FaCogs, FaEdit, FaTimes } from "react-icons/fa";
 
 interface NavLink {
   name: string;
@@ -21,9 +15,17 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   const links: NavLink[] = [
-    { name: "Customize Skills", icon: <FaCogs />, path: "/dashboard/customize-skills" },
+    {
+      name: "Customize Skills",
+      icon: <FaCogs />,
+      path: "/dashboard/customize-skills",
+    },
     { name: "Manage Blogs", icon: <FaBook />, path: "/dashboard/manage-blogs" },
-    { name: "Manage Projects", icon: <FaEdit />, path: "/dashboard/manage-projects" },
+    {
+      name: "Manage Projects",
+      icon: <FaEdit />,
+      path: "/dashboard/manage-projects",
+    },
   ];
 
   return (
