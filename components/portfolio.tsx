@@ -8,13 +8,18 @@ import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 interface Project {
-  id: number | string;
+  _id: number | string;
   title: string;
   description: string;
   image?: string;
   tags: string[];
   detailsLink: string;
   link: string;
+}
+
+function truncateText(text: string, maxLength: number) {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength).trimEnd() + "...";
 }
 
 export default function Portfolio() {
@@ -102,8 +107,7 @@ export default function Portfolio() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3, duration: 0.3 }}
         >
-          Explore our recent work and see how we've helped businesses achieve their
-          digital goals.
+          Explore our recent work and see how we've helped businesses achieve their digital goals.
         </motion.p>
       </div>
 
@@ -113,7 +117,7 @@ export default function Portfolio() {
       >
         {projects.slice(0, visibleCount).map((project) => (
           <motion.div
-            key={project.id}
+            key={project._id}
             className="group relative overflow-hidden rounded-lg border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
             variants={cardVariants}
           >
@@ -127,8 +131,8 @@ export default function Portfolio() {
               />
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-              <p className="text-muted-foreground mb-4">{project.description}</p>
+              <h3 className="text-xl font-bold mb-2">{truncateText(project.title, 30)}</h3>
+              <p className="text-muted-foreground mb-4">{truncateText(project.description, 100)}</p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.tags.map((tag, tagIndex) => (
                   <span
@@ -141,15 +145,12 @@ export default function Portfolio() {
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" asChild>
-                  <a href={`projects/${project.id}`}>Details</a>
+                  <a href={`projects/${project._id}`}>Details</a>
                 </Button>
                 <Button variant="outline" size="sm" asChild>
-                  <a
-                    href={project.link}
-                    target="_blank"
-                   >
+                  <a href={project.link} target="_blank">
                     Live Link{" "}
-                   </a>
+                  </a>
                 </Button>
               </div>
             </div>

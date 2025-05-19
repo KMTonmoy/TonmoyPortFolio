@@ -19,7 +19,7 @@ const Blogs: React.FC = () => {
   const [shuffledBlogs, setShuffledBlogs] = useState<Blog[]>([])
 
   useEffect(() => {
-    fetch('/blogs.json') // Your blogs.json should be in /public
+    fetch('https://tonmoy-portfolio-back-end.vercel.app/editor-content/') 
       .then((res) => res.json())
       .then((data: Blog[]) => {
         const shuffled = shuffleArray(data)
@@ -57,23 +57,26 @@ const Blogs: React.FC = () => {
         ))}
       </div>
 
-      <div className="mt-8 text-center">
-        {visibleCount < shuffledBlogs.length ? (
-          <button
-            onClick={() => setVisibleCount((prev) => prev + 6)}
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
-          >
-            See More
-          </button>
-        ) : (
-          <button
-            onClick={() => setVisibleCount(6)}
-            className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
-          >
-            Show Less
-          </button>
-        )}
-      </div>
+      {/* Show buttons only if there are more than 6 blogs */}
+      {shuffledBlogs.length > 6 && (
+        <div className="mt-8 text-center">
+          {visibleCount < shuffledBlogs.length ? (
+            <button
+              onClick={() => setVisibleCount((prev) => prev + 6)}
+              className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+            >
+              See More
+            </button>
+          ) : (
+            <button
+              onClick={() => setVisibleCount(6)}
+              className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition"
+            >
+              Show Less
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }

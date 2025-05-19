@@ -21,7 +21,7 @@ export default function Blogs() {
   const [displayedBlogs, setDisplayedBlogs] = useState<Blog[]>([])
 
   useEffect(() => {
-    fetch("/blogs.json")
+    fetch("https://tonmoy-portfolio-back-end.vercel.app/editor-content")
       .then((res) => res.json())
       .then((data) => {
         setAllBlogs(data)
@@ -108,7 +108,7 @@ export default function Blogs() {
             transition={{ delay: index * 0.1 }}
           >
             <div className="aspect-video overflow-hidden">
-              <Image
+              <img
                 src={blog.image}
                 alt={blog.title}
                 width={600}
@@ -119,7 +119,7 @@ export default function Blogs() {
             <div className="p-6">
               <h3 className="text-xl font-semibold mb-2">{blog.title}</h3>
               <p className="text-sm text-muted-foreground mb-4">{blog.description}</p>
-              <Link href={`/blogs/${blog.slug}`}>
+              <Link href={`/blogs/${blog._id}`}>
                 <Button size="sm" variant="outline">
                   Read More
                 </Button>
