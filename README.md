@@ -1,51 +1,53 @@
-# TonmoyBD
+# 🎨 Portfolio Dashboard Frontend
 
-**TonmoyBD** is a web development agency focused on creating innovative and scalable web solutions. Our mission is to provide high-quality, user-friendly websites and applications that drive growth and success for our clients.
+This is the frontend for a personal portfolio dashboard built with **Next.js**, **Tailwind CSS**, and **TypeScript**. It allows you to manage **Projects**, **Skills**, and **Blogs** with a modern UI and editor.
 
-![TonmoyBD Screenshot](./public/Screenshot.png)  
+---
 
-## Technologies Used
+## 🛠️ Tech Stack
 
-- **Frontend**: React.js, Next.js, Tailwind CSS, TypeScript
-- **Backend**: Node.js, Express.js, Prisma, PostgreSQL
-- **Others**: JWT (for authentication), Axios (for API requests), SSLCommerz/ShurjoPay (payment integration)
+- [Next.js](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React Icons](https://react-icons.github.io/react-icons/)
+- [Jodit Editor](https://xdsoft.net/jodit/) – Rich text editor for blog content
+- [SweetAlert2](https://sweetalert2.github.io/) – For alerts and confirmations
+- [CountUp.js](https://inorganik.github.io/countUp.js/) – For stat animations
 
-## Features
+---
 
-- Custom website and web app development
-- E-commerce solutions
-- Event planning systems
-- Content management systems
-- Payment gateway integrations
+## 📦 Features
 
-## Services
+- 📊 Dashboard overview with animated stats
+- 🧠 Skills manager
+- 💼 Project display
+- 📝 Blog editor with image support
+- 🎨 Fully styled using Tailwind CSS
+- ⚡ Fast, responsive UI
 
-- **Website Development**: We specialize in responsive websites tailored to your business needs.
-- **Web Application Development**: Scalable and secure web apps using the latest technologies.
-- **Mobile-Responsive Design**: Ensuring your website looks great on all devices.
-- **SEO and Performance Optimization**: Helping you rank higher and deliver better performance.
-- **Payment Integration**: Secure payment solutions with SSLCommerz/ShurjoPay.
+---
 
-## Contact Us
+## 📂 Pages Overview
 
-For inquiries or project collaborations, feel free to reach out!
+- `/` – Dashboard overview (animated counts + simple descriptions)
+- `/skills` – Skill management page (view/update/delete)
+- `/projects` – Project listing (view only)
+- `/blogs` – Blog listing (view only)
+- `/add-blog` – Blog editor form with title, image, and Jodit rich editor
 
-Email: contact@Tonmoybd.com  
-Phone: +8801XXXXXXXXX  
-Website: [Tonmoybd.com](https://Tonmoybd.com)
+---
 
-## Installation
+## ⚙️ Setup
 
-If you are looking to set up the project locally, you can follow these steps:
-
-### 1. Clone the repository:
-```bash
-git clone https://github.com/your-repo/Tonmoybd.git
-npm install
-npm run dev
+## Setup ENV 
 ```
+DB_URL=Your string
+```
+### 2. Clone the repo
 
-
-
- 
-
+```bash
+git clone https://github.com/your-username/your-portfolio-frontend.git
+cd TonmoyPortFolio
+npm install
+ npn run dev
+```
