@@ -2,20 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-// import myImage from "../public/myimage.jpg";
-
 import Link from "next/link";
 import { Typewriter } from "react-simple-typewriter";
-import { FaFacebookF, FaGithub, FaLinkedinIn, FaTwitter } from "react-icons/fa";
+import { FaFacebookF, FaGithub, FaLinkedinIn } from "react-icons/fa";
 
 export default function Hero() {
   return (
-    <section className="container max-w-screen-2xl py-20 px-4 md:px-8">
-      <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-12">
+    <section className="container max-w-screen-2xl py-12 md:py-20 px-4 md:px-8">
+      <div className="flex flex-col-reverse lg:flex-row items-center justify-between gap-8 md:gap-12">
         {/* Left */}
-        <div className="w-full lg:w-1/2 text-center lg:text-left space-y-8">
+        <div className="w-full lg:w-1/2 text-center lg:text-left space-y-6 md:space-y-8">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight text-foreground">
-            Hey, I’m Tonmoy
+            Hey, I'm Tonmoy
             <br />
             <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
               <Typewriter
@@ -79,16 +77,23 @@ export default function Hero() {
         </div>
 
         {/* Right: Image */}
-        <div className="w-full lg:w-1/2 relative">
-          <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-blue-500/10 to-transparent rounded-xl"></div>
-          <Image
-            src="https://i.ibb.co.com/gZQFQg7C/wmremove-transformed-Picsart-Ai-Image-Enhancer.png"
- 
-             alt="Tonmoy Banner"
-            width={800}
-            height={600}
-            className="rounded-xl shadow-2xl border border-white/10 object-cover w-full h-auto"
-          />
+        <div className="w-full lg:w-1/2 flex justify-center">
+          <div className="relative w-full max-w-md lg:max-w-lg xl:max-w-xl">
+            {/* Background gradient element */}
+            <div className="absolute -inset-4 -z-10 bg-gradient-to-tr from-blue-400/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-lg opacity-70"></div>
+            
+            {/* Border and shadow container */}
+            <div className="relative rounded-xl overflow-hidden shadow-2xl border-4 border-white/20">
+              <Image
+                src="https://res.cloudinary.com/dgwknm4yi/image/upload/v1758275707/wmremove-transformed-Picsart-AiImageEnhance_epxzfm.jpg"
+                alt="Tonmoy Banner"
+                width={600}
+                height={600}
+                className="object-cover w-full h-auto"
+                priority
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>
