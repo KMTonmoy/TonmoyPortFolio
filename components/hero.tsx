@@ -82,7 +82,8 @@ export default function Hero() {
         <div className="w-full lg:w-1/2 relative">
           <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-primary/10 via-blue-500/10 to-transparent rounded-xl"></div>
           <Image
-            src="https://i.ibb.co/M51WCsyy/Whats-App-Image-2025-06-13-at-16-52-00-338970cf.jpg"
+            src="https://i.ibb.co.com/gZQFQg7C/wmremove-transformed-Picsart-Ai-Image-Enhancer.png"
+{/*             src="https://i.ibb.co/M51WCsyy/Whats-App-Image-2025-06-13-at-16-52-00-338970cf.jpg" */}
 {/*             src={myImage} */}
             alt="Tonmoy Banner"
             width={800}
