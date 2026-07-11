@@ -227,4 +227,5 @@ const ProjectDetailsPage = ({ params }: { params: Promise<{ _id: string }> }) =>
   )
 }
 
+
 export default ProjectDetailsPage
