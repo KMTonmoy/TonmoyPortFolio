@@ -22,7 +22,6 @@ export default function Home() {
         <Hero />
         <Features />
         <MySkill />
-
         <Portfolio />
         <Blogs/>
         <Testimonials />
