@@ -1,4 +1,5 @@
- 
+// types/auth.types.ts
+
 import { User } from "firebase/auth";
 
 export interface AuthUser {
@@ -11,8 +12,8 @@ export interface AuthUser {
 
 export interface UserData {
   email: string;
-  name?: string;
-  photo?: string;
+  name: string; // Made required, not optional
+  photo: string; // Made required, not optional
   role?: "user" | "admin";
   createdAt?: number;
   lastLogin?: number;

@@ -25,8 +25,9 @@ export default function RootLayout({
       <body className={`${inter.className} bg-background text-foreground antialiased`}>
         <ToastContainer/>
         <MouseMoveEffect />
-        <Navbar/>
         <AuthProvider> 
+                  <Navbar/>
+
         {children}
         </AuthProvider>
 

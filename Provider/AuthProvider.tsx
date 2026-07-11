@@ -105,9 +105,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           displayName: name,
           photoURL: photo,
         });
-        // Update local user state
+        const updatedUser = auth.currentUser;
         setUser({
-          ...auth.currentUser,
+          ...updatedUser,
           displayName: name,
           photoURL: photo,
         });
@@ -120,9 +120,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const saveUser = async (user: User) => {
     try {
+      // Ensure email is never undefined
+      const userEmail = user.email ?? "";
+      
       // Check if user exists
       const existingUserResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/${user?.email}`
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${userEmail}`
       );
       const existingUser = existingUserResponse.data;
 
@@ -130,11 +133,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return existingUser;
       }
 
-      // Create new user
+      // Create new user - handle null/undefined values safely
       const currentUser = {
-        email: user?.email,
-        name: user?.displayName,
-        photo: user?.photoURL,
+        email: userEmail,
+        name: user.displayName ?? "",
+        photo: user.photoURL ?? "",
         role: "user",
       };
 
