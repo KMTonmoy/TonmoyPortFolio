@@ -5,6 +5,7 @@ import type { Metadata } from "next"
 import MouseMoveEffect from "@/components/mouse-move-effect"
 import { ToastContainer } from "react-toastify"
 import Navbar from "@/components/navbar"
+import AuthProvider from "@/Provider/AuthProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -25,7 +26,10 @@ export default function RootLayout({
         <ToastContainer/>
         <MouseMoveEffect />
         <Navbar/>
+        <AuthProvider> 
         {children}
+        </AuthProvider>
+
       </body>
     </html>
   )
