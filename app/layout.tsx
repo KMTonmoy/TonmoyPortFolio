@@ -6,6 +6,7 @@ import MouseMoveEffect from "@/components/mouse-move-effect"
 import { ToastContainer } from "react-toastify"
 import Navbar from "@/components/navbar"
 import AuthProvider from "@/Provider/AuthProvider"
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -29,6 +30,19 @@ export default function RootLayout({
                   <Navbar/>
 
         {children}
+         <Toaster
+            position="top-right"
+            richColors
+            closeButton
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: "var(--background)",
+                color: "var(--foreground)",
+                border: "1px solid var(--border)",
+              },
+            }}
+          />
         </AuthProvider>
 
       </body>

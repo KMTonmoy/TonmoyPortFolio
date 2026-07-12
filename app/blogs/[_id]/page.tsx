@@ -35,7 +35,7 @@ const BlogDetailsPage = ({ params }: { params: Promise<{ _id: string }> }) => {
     async function fetchBlog() {
       try {
         const res = await fetch(
-          `https://tonmoy-portfolio-back-end.vercel.app/editor-content/${id}`,
+          `https://tonmoy-pro-backend.vercel.app/editor-content/${id}`,
           { cache: 'no-store' }
         )
         if (!res.ok) {

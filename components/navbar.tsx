@@ -162,12 +162,7 @@ export default function Navbar() {
                   Login
                 </Link>
               </Button>
-              <Button variant="gradient" size="sm" asChild>
-                <Link href="/register" className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  Sign Up
-                </Link>
-              </Button>
+             
             </>
           )}
           <Button variant="gradient" size="sm" asChild className="hidden lg:flex">

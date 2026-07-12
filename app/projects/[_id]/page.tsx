@@ -33,7 +33,7 @@ const ProjectDetailsPage = ({ params }: { params: Promise<{ _id: string }> }) =>
 
     async function fetchProject() {
       try {
-        const res = await fetch(`https://tonmoy-portfolio-back-end.vercel.app/projects/${id}`, {
+        const res = await fetch(`https://tonmoy-pro-backend.vercel.app/projects/${id}`, {
           cache: 'no-store',
         })
         if (!res.ok) {

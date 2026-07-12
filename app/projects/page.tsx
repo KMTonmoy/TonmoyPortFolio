@@ -29,7 +29,7 @@ export default function Portfolio() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const res = await fetch('https://tonmoy-portfolio-back-end.vercel.app/projects')
+        const res = await fetch('https://tonmoy-pro-backend.vercel.app/projects')
         if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`)
         const data = await res.json()
         

@@ -21,7 +21,7 @@ export default function Blogs() {
   const [displayedBlogs, setDisplayedBlogs] = useState<Blog[]>([])
 
   useEffect(() => {
-    fetch("https://tonmoy-portfolio-back-end.vercel.app/editor-content")
+    fetch("https://tonmoy-pro-backend.vercel.app/editor-content")
       .then((res) => res.json())
       .then((data) => {
         setAllBlogs(data)

@@ -43,7 +43,7 @@ const Blogs: React.FC = () => {
   const isInView = useInView(ref, { once: true, amount: 0.1 })
 
   useEffect(() => {
-    fetch('https://tonmoy-portfolio-back-end.vercel.app/editor-content/')
+    fetch('https://tonmoy-pro-backend.vercel.app/editor-content/')
       .then((res) => res.json())
       .then((data: Blog[]) => {
         setBlogs(data)
