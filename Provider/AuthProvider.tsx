@@ -1,4 +1,3 @@
-// Provider/AuthProvider.tsx
 
 "use client";
 
@@ -11,6 +10,8 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   updateProfile,
   User,
@@ -18,6 +19,7 @@ import {
 import { app } from "@/firebase/firebase.config";
 import axios from "axios";
 import { AuthContextType } from "@/types/auth.types";
+import { toast } from "sonner";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -66,20 +68,56 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signInWithGoogle = async () => {
     setLoading(true);
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      setUser(result.user);
-      router.push("/");
-      return result;
-    } catch (error) {
+      // Try popup first
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        setUser(result.user);
+        await saveUser(result.user);
+        toast.success("Logged in with Google successfully!");
+        router.push("/");
+        return result;
+      } catch (popupError: any) {
+        // If popup is blocked, use redirect
+        if (popupError.code === 'auth/popup-blocked' || popupError.code === 'auth/unauthorized-domain') {
+          toast.info("Popup blocked! Redirecting to Google...");
+          await signInWithRedirect(auth, googleProvider);
+        } else {
+          throw popupError;
+        }
+      }
+    } catch (error: any) {
       console.error("Error signing in with Google:", error);
+      toast.error(error.message || "Failed to login with Google");
       throw error;
     } finally {
       setLoading(false);
     }
   };
 
+  // Handle redirect result
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const user = result.user;
+          setUser(user);
+          await saveUser(user);
+          toast.success("Logged in with Google successfully!");
+          router.push("/");
+        }
+      } catch (error: any) {
+        console.error("Redirect result error:", error);
+        toast.error(error.message || "Failed to login with Google");
+      }
+    };
+
+    handleRedirectResult();
+  }, [router]);
+
   const logOut = async (): Promise<void> => {
     setLoading(true);
+    const loadingToast = toast.loading("Logging out...");
     try {
       await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/logout`,
@@ -89,10 +127,16 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       );
       await signOut(auth);
       setUser(null);
+      toast.success("Logged out successfully!", {
+        id: loadingToast,
+      });
       router.push("/login");
     } catch (error) {
       console.error("Error logging out:", error);
-      throw error;
+      toast.error("Logout failed", {
+        id: loadingToast,
+        description: "Failed to logout. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
@@ -120,10 +164,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const saveUser = async (user: User) => {
     try {
-      // Ensure email is never undefined
       const userEmail = user.email ?? "";
       
-      // Check if user exists
       const existingUserResponse = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/users/${userEmail}`
       );
@@ -133,12 +175,12 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         return existingUser;
       }
 
-      // Create new user - handle null/undefined values safely
       const currentUser = {
         email: userEmail,
         name: user.displayName ?? "",
         photo: user.photoURL ?? "",
         role: "user",
+        status: "active",
       };
 
       const { data } = await axios.put(
