@@ -32,7 +32,7 @@ export default function Navbar() {
     }
   };
 
-  const getInitials = (name: string | null | undefined) => {
+   const getInitials = (name: string | null | undefined) => {
     if (!name) return "U";
     return name
       .split(" ")
@@ -162,14 +162,10 @@ export default function Navbar() {
                   Login
                 </Link>
               </Button>
+             
             </>
           )}
-          <Button 
-            variant="default" 
-            size="sm" 
-            asChild 
-            className="hidden lg:flex bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
-          >
+          <Button variant="gradient" size="sm" asChild className="hidden lg:flex">
             <Link href="/contact">Contact</Link>
           </Button>
         </div>
