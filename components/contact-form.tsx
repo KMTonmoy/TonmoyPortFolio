@@ -87,7 +87,12 @@ export default function ContactForm() {
         />
       </div>
 
-      <Button type="submit" variant="gradient" className="w-full" disabled={isSubmitting || isSubmitted}>
+      <Button 
+        type="submit" 
+        variant="default" 
+        className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-xl transition-all duration-300" 
+        disabled={isSubmitting || isSubmitted}
+      >
         {isSubmitting ? (
           <>
             Sending... <Send className="ml-2 h-4 w-4 animate-pulse" />

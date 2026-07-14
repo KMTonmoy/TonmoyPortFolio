@@ -41,7 +41,6 @@ export default function Signup() {
     setError("");
     setIsSubmitting(true);
 
-    // Validate password strength
     if (password.length < 6) {
       setError("Password must be at least 6 characters long.");
       setIsSubmitting(false);
@@ -49,21 +48,17 @@ export default function Signup() {
     }
 
     try {
-      // Create user with email and password
       await createUser(email, password);
 
-      // Upload image if provided
       let imageUrl = "";
       if (image) {
         try {
           imageUrl = await imageUpload(image);
         } catch (err) {
           console.error("Image upload failed:", err);
-          // Continue without image if upload fails
         }
       }
 
-      // Update user profile with name and photo
       if (name || imageUrl) {
         await updateUserProfile(name, imageUrl);
       }
@@ -228,8 +223,8 @@ export default function Signup() {
 
           <Button
             type="submit"
-            variant="gradient"
-            className="w-full"
+            variant="default"
+            className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
             disabled={isSubmitting || isSubmitted}
           >
             {isSubmitting ? (
@@ -259,9 +254,8 @@ export default function Signup() {
             </span>
           </div>
         </div>
-        {/* Google Signup */}
 
-        
+        {/* Google Signup */}
         <Button
           type="button"
           variant="outline"

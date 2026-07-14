@@ -106,7 +106,7 @@ export default function AboutPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <div className="absolute bottom-6 left-6">
-                    <span className="inline-flex items-center gap-2 bg-primary/90 text-black px-4 py-2 rounded-full text-sm font-medium">
+                    <span className="inline-flex items-center gap-2 bg-primary/90 text-white px-4 py-2 rounded-full text-sm font-medium">
                       <Zap className="h-4 w-4" />
                       Full Stack Developer
                     </span>
@@ -133,7 +133,12 @@ export default function AboutPage() {
                 </motion.p>
 
                 <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
-                  <Button variant="gradient" size="lg" asChild className="group">
+                  <Button 
+                    variant="default" 
+                    size="lg" 
+                    asChild 
+                    className="group bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                  >
                     <Link href="/projects">
                       View My Work
                       <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -361,7 +366,12 @@ export default function AboutPage() {
                 Let's work together to create something extraordinary. I'm always open to new opportunities and collaborations.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <Button variant="gradient" size="lg" asChild className="group">
+                <Button 
+                  variant="default" 
+                  size="lg" 
+                  asChild 
+                  className="group bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+                >
                   <Link href="/projects">
                     View My Work
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

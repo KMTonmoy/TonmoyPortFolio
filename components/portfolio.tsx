@@ -165,7 +165,12 @@ export default function Portfolio() {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.4, duration: 0.3 }}
         >
-          <Button variant="gradient" size="lg" onClick={handleShowMore}>
+          <Button 
+            variant="default" 
+            size="lg" 
+            onClick={handleShowMore}
+            className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+          >
             {visibleCount >= projects.length ? "Show Less" : "Show More"}
             <span className="inline-block transition-transform group-hover:translate-x-1 ml-1">
               →

@@ -135,7 +135,12 @@ export default function Blogs() {
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ delay: 0.4, duration: 0.3 }}
       >
-        <Button variant="gradient" size="lg" asChild>
+        <Button 
+          variant="default" 
+          size="lg" 
+          asChild
+          className="bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+        >
           <Link href="/blogs" className="group">
             View All Blogs
             <span className="inline-block transition-transform group-hover:translate-x-1 ml-1">→</span>
