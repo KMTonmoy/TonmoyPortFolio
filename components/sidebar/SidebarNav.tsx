@@ -47,7 +47,7 @@ export const SidebarNav = ({ isAdmin }: SidebarNavProps) => {
         { name: "Users", icon: <FaUsers />, path: "/dashboard/manage-users" },
         { name: "Projects", icon: <FaProjectDiagram />, path: "/dashboard/manage-projects" },
         { name: "Blogs", icon: <FaBlog />, path: "/dashboard/manage-blogs" },
-        { name: "Skills", icon: <FaCode />, path: "/dashboard/manage-skills" },
+        { name: "Skills", icon: <FaCode />, path: "/dashboard/customize-skills" },
       ]
     },
     { 

@@ -2,12 +2,12 @@
 import { initializeApp, FirebaseApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: "AIzaSyBBI178X93I6b3FlcnjK2uTb4Pq41B7fO8",
+  authDomain: "tonmoy-pro-d9503.firebaseapp.com",
+  projectId: "tonmoy-pro-d9503",
+  storageBucket: "tonmoy-pro-d9503.firebasestorage.app",
+  messagingSenderId: "566338930845",
+  appId: "1:566338930845:web:dcb70fa2babc11a70f6c74",
 };
 
 export const app: FirebaseApp = initializeApp(firebaseConfig);

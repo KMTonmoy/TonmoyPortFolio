@@ -1,3 +1,4 @@
+// Provider/AuthProvider.tsx
 
 "use client";
 
@@ -33,6 +34,7 @@ interface AuthProviderProps {
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const router = useRouter();
 
   const createUser = async (email: string, password: string) => {
@@ -67,30 +69,43 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signInWithGoogle = async () => {
     setLoading(true);
+    setIsRedirecting(true);
+    
     try {
-      // Try popup first
-      try {
-        const result = await signInWithPopup(auth, googleProvider);
-        setUser(result.user);
-        await saveUser(result.user);
-        toast.success("Logged in with Google successfully!");
-        router.push("/");
-        return result;
-      } catch (popupError: any) {
-        // If popup is blocked, use redirect
-        if (popupError.code === 'auth/popup-blocked' || popupError.code === 'auth/unauthorized-domain') {
-          toast.info("Popup blocked! Redirecting to Google...");
-          await signInWithRedirect(auth, googleProvider);
-        } else {
-          throw popupError;
+      // Check if running on Vercel
+      const isVercel = typeof window !== 'undefined' && 
+        (window.location.hostname.includes('vercel.app') || 
+         window.location.hostname.includes('tonmoy-pro.vercel.app'));
+      
+      if (isVercel) {
+        // Use redirect on Vercel
+        toast.info("Redirecting to Google...");
+        await signInWithRedirect(auth, googleProvider);
+      } else {
+        // Use popup locally
+        try {
+          const result = await signInWithPopup(auth, googleProvider);
+          setUser(result.user);
+          await saveUser(result.user);
+          toast.success("Logged in with Google successfully!");
+          router.push("/");
+          return result;
+        } catch (popupError: any) {
+          if (popupError.code === 'auth/popup-blocked') {
+            toast.info("Popup blocked! Redirecting to Google...");
+            await signInWithRedirect(auth, googleProvider);
+          } else {
+            throw popupError;
+          }
         }
       }
     } catch (error: any) {
-      console.error("Error signing in with Google:", error);
+      console.error("Google login error:", error);
       toast.error(error.message || "Failed to login with Google");
       throw error;
     } finally {
       setLoading(false);
+      setIsRedirecting(false);
     }
   };
 
@@ -109,6 +124,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } catch (error: any) {
         console.error("Redirect result error:", error);
         toast.error(error.message || "Failed to login with Google");
+      } finally {
+        setIsRedirecting(false);
       }
     };
 
