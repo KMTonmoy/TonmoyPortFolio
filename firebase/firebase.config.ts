@@ -1,13 +1,25 @@
  
 import { initializeApp, FirebaseApp } from "firebase/app";
+import { getAnalytics, Analytics } from "firebase/analytics";
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBBI178X93I6b3FlcnjK2uTb4Pq41B7fO8",
-  authDomain: "tonmoy-pro-d9503.firebaseapp.com",
-  projectId: "tonmoy-pro-d9503",
-  storageBucket: "tonmoy-pro-d9503.firebasestorage.app",
-  messagingSenderId: "566338930845",
-  appId: "1:566338930845:web:dcb70fa2babc11a70f6c74",
+  apiKey: "AIzaSyBUgMg7U-MnUaKJI7E8v5Auu6wmKlJzoDk",
+  authDomain: "tonmoypro-414a7.firebaseapp.com",
+  projectId: "tonmoypro-414a7",
+  storageBucket: "tonmoypro-414a7.firebasestorage.app",
+  messagingSenderId: "593165175859",
+  appId: "1:593165175859:web:b6658e05fe5763d776a746",
+  measurementId: "G-3LV2KBGV72"
 };
 
-export const app: FirebaseApp = initializeApp(firebaseConfig);
+// Initialize Firebase
+const app: FirebaseApp = initializeApp(firebaseConfig);
+
+// Initialize Analytics (only on client side)
+let analytics: Analytics | undefined;
+if (typeof window !== 'undefined') {
+  analytics = getAnalytics(app);
+}
+
+export { app, analytics };
