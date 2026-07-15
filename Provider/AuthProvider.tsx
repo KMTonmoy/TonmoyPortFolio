@@ -11,8 +11,6 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   signOut,
   updateProfile,
   User,
@@ -34,7 +32,6 @@ interface AuthProviderProps {
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isRedirecting, setIsRedirecting] = useState(false);
   const router = useRouter();
 
   const createUser = async (email: string, password: string) => {
@@ -42,10 +39,19 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       setUser(result.user);
+      await saveUser(result.user);
+      toast.success("Account created successfully!");
       router.push("/");
       return result;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating user:", error);
+      if (error.code === 'auth/email-already-in-use') {
+        toast.error("Email already in use. Please login.");
+      } else if (error.code === 'auth/weak-password') {
+        toast.error("Password should be at least 6 characters.");
+      } else {
+        toast.error(error.message || "Failed to create account");
+      }
       throw error;
     } finally {
       setLoading(false);
@@ -57,10 +63,21 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       setUser(result.user);
+      await saveUser(result.user);
+      toast.success("Logged in successfully!");
       router.push("/");
       return result;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error signing in:", error);
+      if (error.code === 'auth/user-not-found') {
+        toast.error("No account found with this email.");
+      } else if (error.code === 'auth/wrong-password') {
+        toast.error("Invalid password.");
+      } else if (error.code === 'auth/too-many-requests') {
+        toast.error("Too many failed attempts. Please try again later.");
+      } else {
+        toast.error(error.message || "Failed to login");
+      }
       throw error;
     } finally {
       setLoading(false);
@@ -69,68 +86,35 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signInWithGoogle = async () => {
     setLoading(true);
-    setIsRedirecting(true);
-    
     try {
-      // Check if running on Vercel
-      const isVercel = typeof window !== 'undefined' && 
-        (window.location.hostname.includes('vercel.app') || 
-         window.location.hostname.includes('tonmoy-pro.vercel.app'));
+      // Set custom parameters for better popup handling
+      googleProvider.setCustomParameters({
+        prompt: 'select_account'
+      });
       
-      if (isVercel) {
-        // Use redirect on Vercel
-        toast.info("Redirecting to Google...");
-        await signInWithRedirect(auth, googleProvider);
-      } else {
-        // Use popup locally
-        try {
-          const result = await signInWithPopup(auth, googleProvider);
-          setUser(result.user);
-          await saveUser(result.user);
-          toast.success("Logged in with Google successfully!");
-          router.push("/");
-          return result;
-        } catch (popupError: any) {
-          if (popupError.code === 'auth/popup-blocked') {
-            toast.info("Popup blocked! Redirecting to Google...");
-            await signInWithRedirect(auth, googleProvider);
-          } else {
-            throw popupError;
-          }
-        }
-      }
+      const result = await signInWithPopup(auth, googleProvider);
+      setUser(result.user);
+      await saveUser(result.user);
+      toast.success("Logged in with Google successfully!");
+      router.push("/");
+      return result;
     } catch (error: any) {
       console.error("Google login error:", error);
-      toast.error(error.message || "Failed to login with Google");
+      
+      if (error.code === 'auth/popup-blocked') {
+        toast.error("Popup blocked! Please allow popups for this site and try again.");
+      } else if (error.code === 'auth/popup-closed-by-user') {
+        toast.info("Login cancelled. Please try again.");
+      } else if (error.code === 'auth/unauthorized-domain') {
+        toast.error("Domain not authorized. Please check Firebase settings.");
+      } else {
+        toast.error(error.message || "Failed to login with Google");
+      }
       throw error;
     } finally {
       setLoading(false);
-      setIsRedirecting(false);
     }
   };
-
-  // Handle redirect result
-  useEffect(() => {
-    const handleRedirectResult = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result) {
-          const user = result.user;
-          setUser(user);
-          await saveUser(user);
-          toast.success("Logged in with Google successfully!");
-          router.push("/");
-        }
-      } catch (error: any) {
-        console.error("Redirect result error:", error);
-        toast.error(error.message || "Failed to login with Google");
-      } finally {
-        setIsRedirecting(false);
-      }
-    };
-
-    handleRedirectResult();
-  }, [router]);
 
   const logOut = async (): Promise<void> => {
     setLoading(true);
