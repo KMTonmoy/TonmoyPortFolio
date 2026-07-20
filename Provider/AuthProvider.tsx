@@ -1,5 +1,4 @@
-// Provider/AuthProvider.tsx
-
+ 
 "use client";
 
 import React, { createContext, useEffect, useState, ReactNode } from "react";
@@ -38,6 +37,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       setUser(result.user);
+      await saveUser(result.user);
       router.push("/");
       return result;
     } catch (error) {
@@ -53,6 +53,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       setUser(result.user);
+      await saveUser(result.user);
       router.push("/");
       return result;
     } catch (error) {
@@ -68,6 +69,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       setUser(result.user);
+      await saveUser(result.user);
       router.push("/");
       return result;
     } catch (error) {
@@ -111,21 +113,38 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const saveUser = async (user: User) => {
     try {
-      const existingUserResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/${user?.email}`
-      );
-      const existingUser = existingUserResponse.data;
-
-      if (existingUser) {
-        return existingUser;
+      const userEmail = user.email ?? "";
+      if (!userEmail) {
+        console.error("User email is empty");
+        return;
       }
 
+      // Try to get existing user
+      try {
+        const existingUserResponse = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/${encodeURIComponent(userEmail)}`
+        );
+        const existingUser = existingUserResponse.data;
+        
+        if (existingUser && existingUser._id) {
+          return existingUser;
+        }
+      } catch (getError: any) {
+        // If user not found (404), proceed to create
+        if (getError.response?.status !== 404) {
+          console.error("Error checking existing user:", getError);
+        }
+      }
+
+      // Create new user
       const currentUser = {
-        email: user?.email,
-        name: user?.displayName,
-        photo: user?.photoURL,
+        email: userEmail,
+        name: user.displayName ?? "",
+        photo: user.photoURL ?? "",
         role: "user",
+        status: "active",
       };
+
       const { data } = await axios.put(
         `${process.env.NEXT_PUBLIC_API_URL}/user`,
         currentUser
@@ -133,7 +152,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return data;
     } catch (error) {
       console.error("Error saving user:", error);
-      throw error;
+      // Don't throw - just log the error
+      return null;
     }
   };
 
@@ -141,13 +161,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        setTimeout(async () => {
-          try {
-            await saveUser(currentUser);
-          } catch (error) {
-            console.error("Error handling auth state change:", error);
-          }
-        }, 5000);
+        try {
+          await saveUser(currentUser);
+        } catch (error) {
+          console.error("Error handling auth state change:", error);
+        }
       }
       setLoading(false);
     });
@@ -162,7 +180,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signInWithGoogle,
     logOut,
     updateUserProfile,
-    saveUser
+    saveUser,
   };
 
   return (
