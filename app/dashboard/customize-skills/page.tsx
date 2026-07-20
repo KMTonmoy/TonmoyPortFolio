@@ -27,7 +27,7 @@ const SkillsPage = () => {
   const fetchSkills = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/skills`);
+      const res = await axios.get(`https://tonmoy-pro-backend.vercel.app/skills`);
       setSkills(res.data);
     } catch {
       toast.error("Failed to fetch skills");
@@ -44,7 +44,7 @@ const SkillsPage = () => {
     setIsSubmitting(true);
     const loadingToast = toast.loading("Adding skill...");
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/skills`, data);
+      await axios.post(`https://tonmoy-pro-backend.vercel.app/skills`, data);
       setIsAddModalOpen(false);
       fetchSkills();
       toast.success("Skill added successfully", { id: loadingToast });
@@ -61,7 +61,7 @@ const SkillsPage = () => {
     const loadingToast = toast.loading("Updating skill...");
     try {
       await axios.patch(
-        `${process.env.NEXT_PUBLIC_API_URL}/skills/${editingSkill._id}`,
+        `https://tonmoy-pro-backend.vercel.app/skills/${editingSkill._id}`,
         data
       );
       setIsEditModalOpen(false);
@@ -80,7 +80,7 @@ const SkillsPage = () => {
     const loadingToast = toast.loading("Deleting skill...");
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/skills/${skillToDelete._id}`
+        `https://tonmoy-pro-backend.vercel.app/skills/${skillToDelete._id}`
       );
       setDeleteDialogOpen(false);
       setSkillToDelete(null);

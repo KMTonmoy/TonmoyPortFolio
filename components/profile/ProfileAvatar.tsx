@@ -43,7 +43,7 @@ export const ProfileAvatar = ({ getInitials }: ProfileAvatarProps) => {
     try {
       const imageUrl = await imageUpload(file);
       await updateUserProfile(user?.displayName || "", imageUrl);
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+      await axios.put(`https://tonmoy-pro-backend.vercel.app/user`, {
         email: user?.email,
         name: user?.displayName || "",
         photo: imageUrl,

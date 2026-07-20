@@ -34,7 +34,7 @@ const ManageBlogs: React.FC = () => {
   const fetchBlogs = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/editor-content`);
+      const res = await fetch(`https://tonmoy-pro-backend.vercel.app/editor-content`);
       const data = await res.json();
       setBlogs(data);
     } catch (err) {
@@ -53,7 +53,7 @@ const ManageBlogs: React.FC = () => {
     
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/editor-content/${blogToDelete._id}`,
+        `https://tonmoy-pro-backend.vercel.app/editor-content/${blogToDelete._id}`,
         { method: 'DELETE' }
       );
 
@@ -85,7 +85,7 @@ const ManageBlogs: React.FC = () => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/editor-content/${editingBlog._id}`,
+        `https://tonmoy-pro-backend.vercel.app/editor-content/${editingBlog._id}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

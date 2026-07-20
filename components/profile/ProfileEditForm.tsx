@@ -40,7 +40,7 @@ export const ProfileEditForm = ({
 
     try {
       await updateUserProfile(editName, user?.photoURL || "");
-      await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+      await axios.put(`https://tonmoy-pro-backend.vercel.app/user`, {
         email: user?.email,
         name: editName,
         photo: user?.photoURL || "",

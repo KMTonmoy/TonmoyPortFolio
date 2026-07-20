@@ -29,7 +29,7 @@ const ManageUsers = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/users`);
+      const response = await axios.get(`https://tonmoy-pro-backend.vercel.app/users`);
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -42,7 +42,7 @@ const ManageUsers = () => {
   const handleBlockUser = async (userId: string) => {
     const loadingToast = toast.loading("Blocking user...");
     try {
-      await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/block`);
+      await axios.patch(`https://tonmoy-pro-backend.vercel.app/users/${userId}/block`);
       toast.success("User blocked successfully", { id: loadingToast });
       fetchUsers();
     } catch (error) {
@@ -53,7 +53,7 @@ const ManageUsers = () => {
   const handleUnblockUser = async (userId: string) => {
     const loadingToast = toast.loading("Unblocking user...");
     try {
-      await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/unblock`);
+      await axios.patch(`https://tonmoy-pro-backend.vercel.app/users/${userId}/unblock`);
       toast.success("User unblocked successfully", { id: loadingToast });
       fetchUsers();
     } catch (error) {
@@ -64,7 +64,7 @@ const ManageUsers = () => {
   const handleMakeAdmin = async (userId: string) => {
     const loadingToast = toast.loading("Promoting user to admin...");
     try {
-      await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/make-admin`);
+      await axios.patch(`https://tonmoy-pro-backend.vercel.app/users/${userId}/make-admin`);
       toast.success("User promoted to admin", { id: loadingToast });
       fetchUsers();
     } catch (error) {
@@ -75,7 +75,7 @@ const ManageUsers = () => {
   const handleRemoveAdmin = async (userId: string) => {
     const loadingToast = toast.loading("Removing admin role...");
     try {
-      await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/remove-admin`);
+      await axios.patch(`https://tonmoy-pro-backend.vercel.app/users/${userId}/remove-admin`);
       toast.success("Admin role removed", { id: loadingToast });
       fetchUsers();
     } catch (error) {
@@ -89,7 +89,7 @@ const ManageUsers = () => {
     }
     const loadingToast = toast.loading("Deleting user...");
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`);
+      await axios.delete(`https://tonmoy-pro-backend.vercel.app/users/${userId}`);
       toast.success("User deleted successfully", { id: loadingToast });
       fetchUsers();
     } catch (error) {

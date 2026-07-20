@@ -28,7 +28,7 @@ export const useUser = () => {
     setError(null);
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/${user.email}`
+        `https://tonmoy-pro-backend.vercel.app/users/${user.email}`
       );
       setUserData(response.data);
     } catch (err) {

@@ -50,9 +50,9 @@ const Page = () => {
     const fetchData = async () => {
       try {
         const [projectsRes, skillsRes, blogsRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/skills`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL}/editor-content`),
+          fetch(`https://tonmoy-pro-backend.vercel.app/projects`),
+          fetch(`https://tonmoy-pro-backend.vercel.app/skills`),
+          fetch(`https://tonmoy-pro-backend.vercel.app/editor-content`),
         ]);
 
         const [projectsData, skillsData, blogsData] = await Promise.all([

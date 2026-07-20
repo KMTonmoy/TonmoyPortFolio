@@ -68,7 +68,7 @@ const BlogEditorPage = () => {
         }
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/editor-content`, {
+      const response = await fetch(`https://tonmoy-pro-backend.vercel.app/editor-content`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

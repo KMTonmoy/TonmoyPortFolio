@@ -83,7 +83,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logOut = async () => {
     setLoading(true);
     try {
-      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/logout`, {
+      await axios.get(`https://tonmoy-pro-backend.vercel.app/logout`, {
         withCredentials: true,
       });
       await signOut(auth);
@@ -122,7 +122,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Try to get existing user
       try {
         const existingUserResponse = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/users/${encodeURIComponent(userEmail)}`
+          `https://tonmoy-pro-backend.vercel.app/users/${encodeURIComponent(userEmail)}`
         );
         const existingUser = existingUserResponse.data;
         
@@ -146,7 +146,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       };
 
       const { data } = await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/user`,
+        `https://tonmoy-pro-backend.vercel.app/user`,
         currentUser
       );
       return data;
