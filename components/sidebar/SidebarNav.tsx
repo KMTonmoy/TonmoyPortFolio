@@ -1,4 +1,3 @@
- 
 "use client";
 
 import { useState } from "react";
@@ -18,7 +17,12 @@ import {
   FaRocket,
   FaShieldAlt,
   FaStar,
-  FaChevronDown
+  FaChevronDown,
+  FaUser,
+  FaBook,
+  FaHeart,
+  FaComments,
+  FaBell
 } from "react-icons/fa";
 import { SidebarLink } from "./SidebarLink";
 import { SidebarNavProps, NavLink } from "@/types/sidebar.types";
@@ -36,6 +40,7 @@ export const SidebarNav = ({ isAdmin }: SidebarNavProps) => {
 
   const commonLinks: NavLink[] = [
     { name: "Dashboard", icon: <FaHome />, path: "/dashboard" },
+    { name: "My Profile", icon: <FaUser />, path: "/profile" },
   ];
 
   const adminLinks: NavLink[] = [
@@ -55,25 +60,27 @@ export const SidebarNav = ({ isAdmin }: SidebarNavProps) => {
       icon: <FaStar />, 
       path: "#",
       subLinks: [
+        { name: "Hero", icon: <FaPalette />, path: "/dashboard/manage-hero" },
         { name: "Banners", icon: <FaImage />, path: "/dashboard/manage-banners", badge: "New" },
         { name: "Resume", icon: <FaFileAlt />, path: "/dashboard/manage-resume" },
       ]
     },
     { name: "Send Email", icon: <FaEnvelope />, path: "/dashboard/send-email", badge: "Beta" },
-     { name: "Featured Projects", icon: <FaRocket />, path: "/dashboard/featured-projects" },
+    { name: "Analytics", icon: <FaChartBar />, path: "/dashboard/analytics" },
+    { name: "Featured Projects", icon: <FaRocket />, path: "/dashboard/featured-projects" },
   ];
 
   const userLinks: NavLink[] = [
     { 
-      name: "My Content", 
-      icon: <FaEdit />, 
+      name: "Activity", 
+      icon: <FaHeart />, 
       path: "#",
       subLinks: [
-        { name: "My Projects", icon: <FaProjectDiagram />, path: "/dashboard/my-projects" },
-        { name: "My Blogs", icon: <FaBlog />, path: "/dashboard/my-blogs" },
-        { name: "My Skills", icon: <FaCogs />, path: "/dashboard/my-skills" },
+        { name: "My Activity", icon: <FaBell />, path: "/dashboard/my-activity" },
+        { name: "Comments", icon: <FaComments />, path: "/dashboard/my-comments" },
       ]
     },
+    { name: "My Bookings", icon: <FaBook />, path: "/dashboard/my-bookings" },
   ];
 
   const links = [...commonLinks, ...(isAdmin ? adminLinks : userLinks)];

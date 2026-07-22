@@ -1,20 +1,20 @@
- 
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
- import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarNav } from "./SidebarNav";
- 
+
+
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = useAuth();
-  const { isAdmin } = useUserRole();
+  const { isAdmin, loading } = useUserRole();
   const router = useRouter();
 
   useEffect(() => {
@@ -59,6 +59,19 @@ const Sidebar = () => {
     setIsOpen(false);
   };
 
+  if (loading) {
+    return (
+      <div className="flex md:w-[280px] z-50 min-h-screen bg-gray-900 text-white">
+        <div className="w-[280px] p-6 flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent" />
+            <p className="mt-2 text-sm text-gray-400">Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex md:w-[280px] z-50 min-h-screen bg-gray-900 text-white">
       <button
@@ -81,7 +94,18 @@ const Sidebar = () => {
           >
             <SidebarHeader user={user} isAdmin={isAdmin} getInitials={getInitials} />
             <SidebarNav isAdmin={isAdmin} />
-           </motion.div>
+            <div className="absolute bottom-0 w-full p-4 border-t border-gray-700 bg-gray-900">
+              <button
+                onClick={handleLogout}
+                className="flex items-center w-full px-4 py-2.5 text-gray-400 hover:text-white hover:bg-red-500/10 rounded-lg transition-all duration-200 group"
+              >
+                <FaSignOutAlt className="h-4 w-4 group-hover:text-red-400 transition-colors" />
+                <span className="ml-3 text-sm font-medium group-hover:text-red-400 transition-colors">
+                  Logout
+                </span>
+              </button>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 

@@ -1,10 +1,10 @@
- 
 "use client";
 
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { SidebarHeaderProps } from "@/types/sidebar.types";
+import { FaShieldAlt, FaUser } from "react-icons/fa";
 
 export const SidebarHeader = ({ user, isAdmin, getInitials }: SidebarHeaderProps) => {
   return (
@@ -55,8 +55,9 @@ export const SidebarHeader = ({ user, isAdmin, getInitials }: SidebarHeaderProps
         transition={{ delay: 0.4 }}
       >
         <Badge 
-          className={`mt-2 ${isAdmin ? "bg-primary/20 text-primary hover:bg-primary/30" : "bg-gray-700 text-gray-300"}`}
+          className={`mt-2 flex items-center gap-1 ${isAdmin ? "bg-primary/20 text-primary hover:bg-primary/30" : "bg-gray-700 text-gray-300"}`}
         >
+          {isAdmin ? <FaShieldAlt className="h-3 w-3" /> : <FaUser className="h-3 w-3" />}
           {isAdmin ? "Administrator" : "Member"}
         </Badge>
       </motion.div>

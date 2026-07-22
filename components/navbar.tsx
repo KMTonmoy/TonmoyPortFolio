@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, LogOut, LogIn, ChevronDown } from "lucide-react";
+import { Menu, X, User, LogOut, LogIn, ChevronDown, Heart } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -21,6 +22,7 @@ export default function Navbar() {
   const [mobileUserMenuOpen, setMobileUserMenuOpen] = useState(false);
   const pathName = usePathname();
   const { user, logOut } = useAuth();
+  const { isAdmin } = useUserRole();
 
   const handleLogout = async () => {
     try {
@@ -32,7 +34,7 @@ export default function Navbar() {
     }
   };
 
-   const getInitials = (name: string | null | undefined) => {
+  const getInitials = (name: string | null | undefined) => {
     if (!name) return "U";
     return name
       .split(" ")
@@ -133,9 +135,16 @@ export default function Navbar() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  {isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard" className="cursor-pointer">
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="cursor-pointer">
-                      Dashboard
+                    <Link href="/feedback" className="cursor-pointer">
+                       Give Feedback
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -162,7 +171,6 @@ export default function Navbar() {
                   Login
                 </Link>
               </Button>
-             
             </>
           )}
           <Button variant="gradient" size="sm" asChild className="hidden lg:flex">
@@ -287,6 +295,30 @@ export default function Navbar() {
               {/* Mobile User Menu Items */}
               {user && (
                 <>
+                  {isAdmin && (
+                    <Link
+                      href="/dashboard"
+                      className="transition-colors hover:text-[#6397ff]"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
+                  <Link
+                    href="/feedback"
+                    className="transition-colors hover:text-[#6397ff] flex items-center gap-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Heart className="h-4 w-4 text-red-500" />
+                    Give Feedback
+                  </Link>
+                  <Link
+                    href="/profile"
+                    className="transition-colors hover:text-[#6397ff]"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Profile
+                  </Link>
                   <button
                     onClick={() => {
                       handleLogout();
@@ -347,12 +379,22 @@ export default function Navbar() {
                 <p className="text-xs text-muted-foreground">{user?.email}</p>
               </div>
             </div>
+            {isAdmin && (
+              <Link
+                href="/dashboard"
+                className="px-2 py-2 text-sm hover:bg-muted rounded-md transition-colors"
+                onClick={() => setMobileUserMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
+            )}
             <Link
-              href="/dashboard"
-              className="px-2 py-2 text-sm hover:bg-muted rounded-md transition-colors"
+              href="/feedback"
+              className="px-2 py-2 text-sm hover:bg-muted rounded-md transition-colors flex items-center gap-2"
               onClick={() => setMobileUserMenuOpen(false)}
             >
-              Dashboard
+              <Heart className="h-4 w-4 text-red-500" />
+              Give Feedback
             </Link>
             <Link
               href="/profile"
