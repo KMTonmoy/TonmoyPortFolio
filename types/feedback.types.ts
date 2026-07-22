@@ -23,3 +23,17 @@ export interface FeedbackFormData {
   avatar: string;
   date: string;
 }
+
+export interface Feedback {
+  _id: string;
+  name: string;
+  email: string;
+  company: string;
+  avatar: string;
+  rating: number;
+  review: string;
+  date: string;
+  likes: number;
+  webShow: boolean;
+  createdAt: string;
+}

@@ -24,6 +24,7 @@ import {
   FaComments,
   FaBell
 } from "react-icons/fa";
+import { MdFeedback } from "react-icons/md";
 import { SidebarLink } from "./SidebarLink";
 import { SidebarNavProps, NavLink } from "@/types/sidebar.types";
 
@@ -53,6 +54,7 @@ export const SidebarNav = ({ isAdmin }: SidebarNavProps) => {
         { name: "Projects", icon: <FaProjectDiagram />, path: "/dashboard/manage-projects" },
         { name: "Blogs", icon: <FaBlog />, path: "/dashboard/manage-blogs" },
         { name: "Skills", icon: <FaCode />, path: "/dashboard/customize-skills" },
+        { name: "Feedback", icon: <MdFeedback  />, path: "/dashboard/manage-feedback" },
       ]
     },
     { 
@@ -60,13 +62,11 @@ export const SidebarNav = ({ isAdmin }: SidebarNavProps) => {
       icon: <FaStar />, 
       path: "#",
       subLinks: [
-        { name: "Hero", icon: <FaPalette />, path: "/dashboard/manage-hero" },
-        { name: "Banners", icon: <FaImage />, path: "/dashboard/manage-banners", badge: "New" },
+         { name: "Banners", icon: <FaImage />, path: "/dashboard/manage-banners", badge: "New" },
         { name: "Resume", icon: <FaFileAlt />, path: "/dashboard/manage-resume" },
       ]
     },
-    { name: "Send Email", icon: <FaEnvelope />, path: "/dashboard/send-email", badge: "Beta" },
-    { name: "Analytics", icon: <FaChartBar />, path: "/dashboard/analytics" },
+     { name: "Send Email", icon: <FaEnvelope />, path: "/dashboard/send-email", badge: "Beta" },
     { name: "Featured Projects", icon: <FaRocket />, path: "/dashboard/featured-projects" },
   ];
 

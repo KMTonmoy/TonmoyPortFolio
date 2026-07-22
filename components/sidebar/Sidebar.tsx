@@ -94,17 +94,7 @@ const Sidebar = () => {
           >
             <SidebarHeader user={user} isAdmin={isAdmin} getInitials={getInitials} />
             <SidebarNav isAdmin={isAdmin} />
-            <div className="absolute bottom-0 w-full p-4 border-t border-gray-700 bg-gray-900">
-              <button
-                onClick={handleLogout}
-                className="flex items-center w-full px-4 py-2.5 text-gray-400 hover:text-white hover:bg-red-500/10 rounded-lg transition-all duration-200 group"
-              >
-                <FaSignOutAlt className="h-4 w-4 group-hover:text-red-400 transition-colors" />
-                <span className="ml-3 text-sm font-medium group-hover:text-red-400 transition-colors">
-                  Logout
-                </span>
-              </button>
-            </div>
+            
           </motion.div>
         )}
       </AnimatePresence>
