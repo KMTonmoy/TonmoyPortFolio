@@ -48,7 +48,7 @@ import {
   FaFile,
 } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
-import { imageUpload } from "@/api/utils";
+import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
 
 interface Resume {
   _id: string;
@@ -64,8 +64,6 @@ const ManageResumes = () => {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedResume, setSelectedResume] = useState<Resume | null>(null);
   const [deleteConfirmName, setDeleteConfirmName] = useState("");
@@ -73,6 +71,13 @@ const ManageResumes = () => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    upload,
+    isUploading,
+    progress: uploadProgress,
+    reset: resetUpload,
+  } = useCloudinaryUpload({ resourceType: "raw", folder: "resumes" });
 
   useEffect(() => {
     fetchResumes();
@@ -98,7 +103,7 @@ const ManageResumes = () => {
     if (files.length === 0) return;
 
     const file = files[0];
-    
+
     if (file.type !== "application/pdf") {
       toast.error("Please upload a PDF file");
       return;
@@ -109,27 +114,11 @@ const ManageResumes = () => {
       return;
     }
 
-    setIsUploading(true);
-    setUploadProgress(0);
     setUploadedFileName(file.name);
-
     const loadingToast = toast.loading("Uploading resume...");
 
     try {
-      const progressInterval = setInterval(() => {
-        setUploadProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return 90;
-          }
-          return prev + 10;
-        });
-      }, 200);
-
-      const imageUrl = await imageUpload(file);
-      
-      clearInterval(progressInterval);
-      setUploadProgress(100);
+      const { url, publicId } = await upload(file);
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/resumes`, {
         method: "POST",
@@ -138,7 +127,8 @@ const ManageResumes = () => {
         },
         body: JSON.stringify({
           name: file.name,
-          url: imageUrl,
+          url,
+          publicId,
           size: file.size,
         }),
       });
@@ -149,9 +139,9 @@ const ManageResumes = () => {
         throw new Error(data.message || "Failed to save resume");
       }
 
-      setResumes([data.resume, ...resumes]);
+      setResumes((prev) => [data.resume, ...prev]);
       toast.success("Resume uploaded successfully!", { id: loadingToast });
-      
+
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -159,9 +149,8 @@ const ManageResumes = () => {
       console.error("Error uploading resume:", error);
       toast.error(error.message || "Failed to upload resume", { id: loadingToast });
     } finally {
-      setIsUploading(false);
-      setUploadProgress(0);
       setUploadedFileName("");
+      resetUpload();
     }
   };
 
@@ -204,7 +193,7 @@ const ManageResumes = () => {
       const data = await response.json();
 
       if (data.success) {
-        setResumes(resumes.filter((r) => r._id !== selectedResume._id));
+        setResumes((prev) => prev.filter((r) => r._id !== selectedResume._id));
         toast.success("Resume deleted successfully!", { id: loadingToast });
         setIsDeleteOpen(false);
         setSelectedResume(null);
@@ -250,9 +239,8 @@ const ManageResumes = () => {
       .slice(0, 2);
   };
 
-  const filteredResumes = resumes.filter(
-    (r) =>
-      r.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredResumes = resumes.filter((r) =>
+    r.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const stats = {
@@ -327,7 +315,7 @@ const ManageResumes = () => {
               onChange={handleFileInputChange}
               className="hidden"
             />
-            
+
             <div className="flex flex-col items-center gap-4">
               {isUploading ? (
                 <>
@@ -497,9 +485,7 @@ const ManageResumes = () => {
               <FaFilePdf className="h-5 w-5 text-red-500" />
               {selectedResume?.name}
             </DialogTitle>
-            <DialogDescription>
-              Resume preview
-            </DialogDescription>
+            <DialogDescription>Resume preview</DialogDescription>
           </DialogHeader>
           <div className="flex-1 min-h-[500px] bg-muted/30 rounded-lg overflow-hidden">
             {selectedResume?.url && (
