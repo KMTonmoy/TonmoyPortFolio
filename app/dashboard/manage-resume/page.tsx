@@ -18,14 +18,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -46,6 +38,10 @@ import {
   FaTimes,
   FaCheck,
   FaFile,
+  FaCalendar,
+  FaRocket,
+  FaStar,
+  FaShieldAlt,
 } from "react-icons/fa";
 import { useDropzone } from "react-dropzone";
 import { useCloudinaryUpload } from "@/hooks/useCloudinaryUpload";
@@ -70,6 +66,7 @@ const ManageResumes = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState("");
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -230,15 +227,6 @@ const ManageResumes = () => {
     });
   };
 
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
-
   const filteredResumes = resumes.filter((r) =>
     r.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -246,6 +234,248 @@ const ManageResumes = () => {
   const stats = {
     total: resumes.length,
     active: resumes.filter((r) => r.isActive).length,
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 25,
+      },
+    },
+    hover: {
+      y: -8,
+      scale: 1.01,
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 30,
+      },
+    },
+  };
+
+  const ResumeCard = ({ resume }: { resume: Resume }) => {
+    const isHovered = hoveredCard === resume._id;
+
+    return (
+      <motion.div
+        variants={cardVariants}
+        whileHover="hover"
+        onHoverStart={() => setHoveredCard(resume._id)}
+        onHoverEnd={() => setHoveredCard(null)}
+        layout
+      >
+        <Card className={`relative overflow-hidden border transition-all duration-500 ${
+          isHovered 
+            ? "border-primary/50 shadow-2xl shadow-primary/20 bg-gradient-to-br from-card to-primary/5" 
+            : "border-border/50 shadow-lg shadow-black/5 hover:shadow-xl"
+        }`}>
+          {/* Animated gradient background */}
+          <div className={`absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-purple-500/10 transition-opacity duration-500 ${
+            isHovered ? "opacity-100" : "opacity-0"
+          }`} />
+          
+          {/* Glow effect */}
+          <div className={`absolute -inset-1 bg-gradient-to-r from-primary/20 to-purple-500/20 blur-xl transition-opacity duration-500 ${
+            isHovered ? "opacity-100" : "opacity-0"
+          }`} />
+
+          <CardContent className="relative p-6 z-10">
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-4 flex-1">
+                {/* Animated icon container */}
+                <motion.div 
+                  className="relative"
+                  animate={{
+                    rotate: isHovered ? [0, -5, 5, -3, 3, 0] : 0,
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <div className={`h-14 w-14 rounded-xl flex items-center justify-center transition-all duration-500 ${
+                    isHovered 
+                      ? "bg-gradient-to-br from-red-500/30 to-red-600/20 shadow-lg shadow-red-500/20" 
+                      : "bg-red-500/10"
+                  }`}>
+                    <FaFilePdf className={`h-7 w-7 transition-all duration-500 ${
+                      isHovered ? "text-red-400 scale-110" : "text-red-500"
+                    }`} />
+                  </div>
+                  
+                  {/* Pulsing ring */}
+                  {resume.isActive && (
+                    <motion.div
+                      className="absolute -inset-1 rounded-xl border-2 border-green-500/30"
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        opacity: [0.5, 0, 0.5],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
+                  )}
+                </motion.div>
+
+                <div className="flex-1 min-w-0">
+                  <motion.h3 
+                    className={`font-bold text-lg line-clamp-1 transition-colors duration-300 ${
+                      isHovered ? "text-primary" : "text-foreground"
+                    }`}
+                  >
+                    {resume.name}
+                  </motion.h3>
+                  
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <motion.span 
+                      className="flex items-center gap-1"
+                      animate={{
+                        scale: isHovered ? 1.05 : 1,
+                      }}
+                    >
+                      <FaFile className="h-3 w-3" />
+                      {formatFileSize(resume.size)}
+                    </motion.span>
+                    <span className="flex items-center gap-1">
+                      <FaCalendar className="h-3 w-3" />
+                      {formatDate(resume.uploadedAt)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 ml-2">
+                {/* Animated status badge */}
+                <motion.div
+                  animate={{
+                    scale: resume.isActive ? [1, 1.05, 1] : 1,
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <Badge
+                    variant={resume.isActive ? "default" : "secondary"}
+                    className={`${
+                      resume.isActive
+                        ? "bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-500 border-green-500/30 hover:bg-green-500/30"
+                        : "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-500 border-yellow-500/30 hover:bg-yellow-500/30"
+                    } border transition-all duration-300`}
+                  >
+                    {resume.isActive ? (
+                      <>
+                        <motion.span
+                          animate={{
+                            scale: [1, 1.2, 1],
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
+                        >
+                          <FaCheck className="h-3 w-3 mr-1" />
+                        </motion.span>
+                        Active
+                      </>
+                    ) : (
+                      <>
+                        <FaTimes className="h-3 w-3 mr-1" />
+                        Inactive
+                      </>
+                    )}
+                  </Badge>
+                </motion.div>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-primary/10">
+                      <FaEllipsisV className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => {
+                        setSelectedResume(resume);
+                        setIsPreviewOpen(true);
+                      }}
+                      className="cursor-pointer hover:bg-primary/10"
+                    >
+                      <FaEye className="h-4 w-4 mr-2" />
+                      Preview
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => window.open(resume.url, "_blank")}
+                      className="cursor-pointer hover:bg-primary/10"
+                    >
+                      <FaDownload className="h-4 w-4 mr-2" />
+                      Download
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={() => openDeleteDialog(resume)}
+                      className="cursor-pointer text-red-600 hover:bg-red-500/10 focus:text-red-600"
+                    >
+                      <FaTrash className="h-4 w-4 mr-2" />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
+
+            {/* Upload progress bar */}
+            {isUploading && uploadedFileName === resume.name && (
+              <motion.div 
+                className="mt-4"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-primary to-purple-500 rounded-full"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${uploadProgress}%` }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <p className="text-xs text-muted-foreground">Uploading...</p>
+                  <p className="text-xs font-medium text-primary">{uploadProgress}%</p>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Futuristic corner accent */}
+            <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden">
+              <div className={`absolute top-0 right-0 w-20 h-20 rotate-45 translate-x-10 -translate-y-10 transition-all duration-500 ${
+                isHovered ? "bg-gradient-to-r from-primary/20 to-purple-500/20" : "bg-transparent"
+              }`} />
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    );
   };
 
   if (loading) {
@@ -266,45 +496,87 @@ const ManageResumes = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        {/* Futuristic Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold">Manage Resumes</h1>
-            <p className="text-muted-foreground">
-              Upload and manage your resume files
-            </p>
+            <motion.h1 
+              className="text-4xl font-bold bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              Resume Vault
+            </motion.h1>
+            <motion.p 
+              className="text-muted-foreground"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              Manage your professional documents
+            </motion.p>
           </div>
-          <Button onClick={fetchResumes} variant="outline" className="gap-2">
-            <FaSpinner className="h-4 w-4" />
-            Refresh
-          </Button>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <Button onClick={fetchResumes} variant="outline" className="gap-2 hover:bg-primary/10">
+              <FaSpinner className="h-4 w-4" />
+              Sync
+            </Button>
+          </motion.div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{stats.total}</div>
-              <div className="text-sm text-muted-foreground">Total Resumes</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-500">{stats.active}</div>
-              <div className="text-sm text-muted-foreground">Active</div>
-            </CardContent>
-          </Card>
-        </div>
+        {/* Stats with animations */}
+        <motion.div 
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {[
+            { label: "Total", value: stats.total, icon: FaFile, color: "from-blue-500/20 to-cyan-500/20", textColor: "text-blue-500" },
+            { label: "Active", value: stats.active, icon: FaRocket, color: "from-green-500/20 to-emerald-500/20", textColor: "text-green-500" },
+            { label: "Inactive", value: stats.total - stats.active, icon: FaShieldAlt, color: "from-yellow-500/20 to-orange-500/20", textColor: "text-yellow-500" },
+            { label: "Total Size", value: resumes.length > 0 
+                ? `${(resumes.reduce((acc, r) => acc + r.size, 0) / (1024 * 1024)).toFixed(1)} MB`
+                : "0 MB", 
+              icon: FaStar, 
+              color: "from-purple-500/20 to-pink-500/20", 
+              textColor: "text-purple-500" 
+            },
+          ].map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              variants={cardVariants}
+              whileHover={{ y: -4, scale: 1.02 }}
+            >
+              <Card className={`bg-gradient-to-br ${stat.color} border-0 backdrop-blur-sm`}>
+                <CardContent className="p-4 text-center">
+                  <stat.icon className={`h-6 w-6 ${stat.textColor} mx-auto mb-2 opacity-70`} />
+                  <div className={`text-2xl font-bold ${stat.textColor}`}>{stat.value}</div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
 
-        {/* Upload Area - Drag & Drop + Click */}
-        <div className="mb-6">
+        {/* Upload Area */}
+        <motion.div 
+          className="mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
           <div
             {...getRootProps()}
             onClick={handleClickUpload}
-            className={`relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 ${
+            className={`relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-500 ${
               isDragActive
-                ? "border-primary bg-primary/5 scale-[1.02]"
-                : "border-border hover:border-primary/50 hover:bg-muted/30"
+                ? "border-primary bg-primary/5 scale-[1.02] shadow-lg shadow-primary/20"
+                : "border-border hover:border-primary/50 hover:bg-muted/30 hover:scale-[1.01]"
             } ${isUploading ? "pointer-events-none opacity-50" : ""}`}
           >
             <input {...getInputProps()} />
@@ -316,7 +588,12 @@ const ManageResumes = () => {
               className="hidden"
             />
 
-            <div className="flex flex-col items-center gap-4">
+            <motion.div 
+              className="flex flex-col items-center gap-4"
+              animate={{
+                scale: isDragActive ? 1.02 : 1,
+              }}
+            >
               {isUploading ? (
                 <>
                   <div className="relative">
@@ -330,7 +607,7 @@ const ManageResumes = () => {
                     <p className="text-sm text-muted-foreground">{uploadedFileName}</p>
                     <div className="w-64 h-2 bg-muted rounded-full mt-2 overflow-hidden">
                       <motion.div
-                        className="h-full bg-primary rounded-full"
+                        className="h-full bg-gradient-to-r from-primary to-purple-500 rounded-full"
                         initial={{ width: 0 }}
                         animate={{ width: `${uploadProgress}%` }}
                         transition={{ duration: 0.3 }}
@@ -340,9 +617,15 @@ const ManageResumes = () => {
                 </>
               ) : (
                 <>
-                  <div className="p-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                  <motion.div 
+                    className="p-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors"
+                    animate={{
+                      scale: isDragActive ? 1.1 : 1,
+                      rotate: isDragActive ? 5 : 0,
+                    }}
+                  >
                     <FaCloudUploadAlt className="h-12 w-12 text-primary" />
-                  </div>
+                  </motion.div>
                   <div>
                     <p className="text-lg font-medium">
                       {isDragActive ? "Drop your PDF here" : "Drag & drop your resume here"}
@@ -360,121 +643,68 @@ const ManageResumes = () => {
                   </Badge>
                 </>
               )}
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Search */}
-        <div className="relative mb-6">
+        <motion.div 
+          className="relative mb-6"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
           <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search resumes by name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-10 border-border/50 focus:border-primary/50 focus:ring-primary/20"
           />
-        </div>
+        </motion.div>
 
-        {/* Table */}
-        <div className="bg-card border border-border rounded-xl overflow-hidden">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Size</TableHead>
-                  <TableHead>Uploaded</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredResumes.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                      {searchTerm ? "No resumes found" : "No resumes uploaded yet"}
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  filteredResumes.map((resume) => (
-                    <TableRow key={resume._id}>
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <FaFilePdf className="h-6 w-6 text-red-500" />
-                          <div>
-                            <p className="font-medium truncate max-w-[200px]">{resume.name}</p>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell>{formatFileSize(resume.size)}</TableCell>
-                      <TableCell>{formatDate(resume.uploadedAt)}</TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={resume.isActive ? "default" : "secondary"}
-                          className={
-                            resume.isActive
-                              ? "bg-green-500/10 text-green-500"
-                              : "bg-yellow-500/10 text-yellow-500"
-                          }
-                        >
-                          {resume.isActive ? (
-                            <>
-                              <FaCheck className="h-3 w-3 mr-1" />
-                              Active
-                            </>
-                          ) : (
-                            <>
-                              <FaTimes className="h-3 w-3 mr-1" />
-                              Inactive
-                            </>
-                          )}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <FaEllipsisV className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-48">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setSelectedResume(resume);
-                                setIsPreviewOpen(true);
-                              }}
-                              className="cursor-pointer"
-                            >
-                              <FaEye className="h-4 w-4 mr-2" />
-                              Preview
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => window.open(resume.url, "_blank")}
-                              className="cursor-pointer"
-                            >
-                              <FaDownload className="h-4 w-4 mr-2" />
-                              Download
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={() => openDeleteDialog(resume)}
-                              className="cursor-pointer text-red-600 focus:text-red-600"
-                            >
-                              <FaTrash className="h-4 w-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
+        {/* Resume Cards Grid */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <AnimatePresence mode="wait">
+            {filteredResumes.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                className="text-center py-16"
+              >
+                <motion.div
+                  animate={{
+                    y: [0, -10, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <div className="text-6xl mb-4">🚀</div>
+                </motion.div>
+                <p className="text-muted-foreground text-lg">
+                  {searchTerm ? "No resumes found" : "Your resume vault is empty"}
+                </p>
+                <p className="text-sm text-muted-foreground mt-2">
+                  {searchTerm ? "Try adjusting your search" : "Upload your first resume to get started"}
+                </p>
+              </motion.div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredResumes.map((resume) => (
+                  <ResumeCard key={resume._id} resume={resume} />
+                ))}
+              </div>
+            )}
+          </AnimatePresence>
+        </motion.div>
       </motion.div>
 
       {/* Preview Dialog */}

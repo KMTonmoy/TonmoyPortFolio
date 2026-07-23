@@ -44,8 +44,7 @@ export const UserTable = ({
             <TableHead>User</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Role</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Joined</TableHead>
+             <TableHead>Joined</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -59,9 +58,8 @@ export const UserTable = ({
                 </div>
               </TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell><UserBadge status={user.status} role={user.role} /></TableCell>
-              <TableCell><UserBadge status={user.status} role={user.role} /></TableCell>
-              <TableCell>{formatDate(user.createdAt)}</TableCell>
+              <TableCell><UserBadge status={user.role} role={user.role} /></TableCell>
+               <TableCell>{formatDate(user.createdAt)}</TableCell>
               <TableCell className="text-right">
                 <div className="flex items-center justify-end gap-2">
                   <Button variant="ghost" size="icon" onClick={() => onViewUser(user)}>
@@ -74,17 +72,7 @@ export const UserTable = ({
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      {user.status === "blocked" ? (
-                        <DropdownMenuItem onClick={() => onUnblockUser(user._id)}>
-                          <UserCheck className="h-4 w-4 mr-2 text-green-500" />
-                          Unblock User
-                        </DropdownMenuItem>
-                      ) : (
-                        <DropdownMenuItem onClick={() => onBlockUser(user._id)}>
-                          <Ban className="h-4 w-4 mr-2 text-red-500" />
-                          Block User
-                        </DropdownMenuItem>
-                      )}
+                   
                       <DropdownMenuSeparator />
                       {user.role === "admin" ? (
                         <DropdownMenuItem onClick={() => onRemoveAdmin(user._id)}>

@@ -1,3 +1,4 @@
+ 
 import { useEffect, useState } from 'react';
 import { useAuth } from './useAuth';
 import axios from 'axios';
@@ -8,6 +9,7 @@ export interface UserData {
   name: string;
   photo: string;
   role: 'user' | 'admin';
+  status?: 'active' | 'blocked' | 'pending';
   createdAt?: number;
   lastLogin?: number;
 }
@@ -28,7 +30,7 @@ export const useUser = () => {
     setError(null);
     try {
       const response = await axios.get(
-        `https://tonmoy-pro-backend.vercel.app/users/${user.email}`
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${user.email}`
       );
       setUserData(response.data);
     } catch (err) {
