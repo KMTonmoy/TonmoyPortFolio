@@ -1,12 +1,12 @@
 import Navbar from "@/components/navbar";
 import Hero from "@/components/hero";
 import Features from "@/components/features";
-import Portfolio from "@/components/portfolio";
 import Testimonials from "@/components/testimonials";
 import ContactSection from "@/components/contact-section";
 import Footer from "@/components/footer";
 import MySkill from "@/components/MySkill";
 import Blogs from "@/components/Blogs";
+import FeaturedProjects from "@/components/FeaturedProjects";
 
 export default function Home() {
   return (
@@ -22,8 +22,8 @@ export default function Home() {
         <Hero />
         <Features />
         <MySkill />
-        <Portfolio />
-        <Blogs/>
+        <Blogs />
+        <FeaturedProjects />
         <Testimonials />
         <ContactSection />
         <Footer />

@@ -2,10 +2,9 @@
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
-import Link from "next/link";
-import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import FeaturedProjectsSkeleton from "@/components/skeletons/FeaturedProjectsSkeleton";
 
 interface Project {
   _id: number | string;
@@ -22,18 +21,28 @@ function truncateText(text: string, maxLength: number) {
   return text.slice(0, maxLength).trimEnd() + "...";
 }
 
-export default function Portfolio() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
-
+export default function FeaturedProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(3);
 
   useEffect(() => {
-    fetch("https://tonmoy-pro-backend.vercel.app/projects")
-      .then((response) => response.json())
-      .then((json: Project[]) => setProjects(json))
-      .catch(() => setProjects([]));
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(
+          "https://tonmoy-pro-backend.vercel.app/projects"
+        );
+        const json: Project[] = await response.json();
+        setProjects(json);
+      } catch (error) {
+        console.error("Failed to fetch projects:", error);
+        setProjects([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
   }, []);
 
   function handleShowMore() {
@@ -45,6 +54,7 @@ export default function Portfolio() {
   }
 
   const containerVariants = {
+    hidden: {},
     visible: {
       transition: {
         staggerChildren: 0.1,
@@ -59,7 +69,7 @@ export default function Portfolio() {
       y: 0,
       scale: 1,
       transition: {
-        duration: 0.3,
+        duration: 0.4,
         ease: "easeOut",
       },
     },
@@ -80,16 +90,18 @@ export default function Portfolio() {
 
   const title = "Featured Projects";
 
+  if (loading) {
+    return <FeaturedProjectsSkeleton count={3} />;
+  }
+
   return (
-    <motion.section
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={containerVariants}
-      className="container py-24 md:py-32"
-    >
+    <section className="container py-24 md:py-32">
       <div className="mx-auto max-w-[58rem] text-center mb-16">
-        <motion.h2 className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-5xl flex justify-center flex-wrap">
+        <motion.h2
+          initial="hidden"
+          animate="visible"
+          className="font-bold text-3xl leading-[1.1] sm:text-3xl md:text-5xl flex justify-center flex-wrap"
+        >
           {title.split("").map((char, index) => (
             <motion.span
               key={index}
@@ -104,16 +116,19 @@ export default function Portfolio() {
         <motion.p
           className="mt-4 text-muted-foreground sm:text-lg"
           initial={{ opacity: 0, y: 10 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.3 }}
         >
-          Explore our recent work and see how we've helped businesses achieve their digital goals.
+          Explore our recent work and see how we've helped businesses achieve
+          their digital goals.
         </motion.p>
       </div>
 
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         variants={containerVariants}
+        initial="hidden"
+        animate="visible"
       >
         {projects.slice(0, visibleCount).map((project) => (
           <motion.div
@@ -131,8 +146,12 @@ export default function Portfolio() {
               />
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">{truncateText(project.title, 30)}</h3>
-              <p className="text-muted-foreground mb-4">{truncateText(project.description, 100)}</p>
+              <h3 className="text-xl font-bold mb-2">
+                {truncateText(project.title, 30)}
+              </h3>
+              <p className="text-muted-foreground mb-4">
+                {truncateText(project.description, 100)}
+              </p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.tags.map((tag, tagIndex) => (
                   <span
@@ -149,7 +168,7 @@ export default function Portfolio() {
                 </Button>
                 <Button variant="outline" size="sm" asChild>
                   <a href={project.link} target="_blank">
-                    Live Link{" "}
+                    Live Link
                   </a>
                 </Button>
               </div>
@@ -162,7 +181,7 @@ export default function Portfolio() {
         <motion.div
           className="mt-12 text-center"
           initial={{ opacity: 0, y: 10 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.3 }}
         >
           <Button variant="gradient" size="lg" onClick={handleShowMore}>
@@ -173,6 +192,6 @@ export default function Portfolio() {
           </Button>
         </motion.div>
       )}
-    </motion.section>
+    </section>
   );
 }
